@@ -761,3 +761,212 @@ svg { display: block; }
 .spatial-head .card__hint{margin-bottom:0}
 .spatial-badge{flex:0 0 auto;border:1px solid rgba(107,77,246,.22);background:rgba(107,77,246,.08);color:#6B4DF6;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:700}
 .spatial-result{margin-top:9px;padding:8px 9px;border-radius:9px;background:rgba(255,255,255,.045);color:#5C5D66;font-size:10px;line-height:1.4}
+
+/* =========================================================
+   MOBILE PRODUCTION PASS — robust against mobile "Desktop site"
+   Uses a wider breakpoint because Android/iOS browsers can expose
+   a desktop-like CSS viewport even on a phone.
+   ========================================================= */
+@media (max-width: 1100px) {
+  :root {
+    --rail-w: 0px;
+    --bar-h: 58px;
+  }
+
+  html, body { overflow: hidden; }
+
+  .app { grid-template-rows: var(--bar-h) 1fr; height: 100dvh; }
+
+  .appbar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 0 10px;
+    min-width: 0;
+  }
+
+  .brand__mark { width: 36px; height: 36px; border-radius: 10px; }
+  .brand__text { display: none; }
+
+  .doc { min-width: 0; overflow: hidden; }
+  .doc__name {
+    max-width: 100%;
+    padding: 2px 4px;
+    margin-left: 0;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .doc__meta { display: none; }
+
+  .appbar__actions { gap: 4px; min-width: 0; }
+  .appbar__actions .btn--quiet,
+  .appbar__actions .total,
+  #previewBtn,
+  #exportBtn,
+  #undoBtn,
+  #redoBtn { display: none; }
+
+  .ai-state {
+    height: 34px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+  .ai-state::before { margin-right: 5px; }
+
+  #summaryBtn {
+    height: 38px;
+    max-width: 108px;
+    padding: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .rail {
+    grid-row: 2;
+    grid-column: 1;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 6px calc(5px + env(safe-area-inset-bottom));
+    background: var(--paper);
+    border-right: 0;
+    border-top: 1px solid var(--line);
+    z-index: 80;
+  }
+
+  .rail__spacer { display: none; }
+  .rail__btn {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: 86px;
+    min-height: 48px;
+    padding: 6px 3px 5px;
+    border-radius: 11px;
+    gap: 3px;
+  }
+  .rail__btn svg { width: 20px; height: 20px; }
+  .rail__btn span { font-size: 10px; }
+  .rail__badge { top: 2px; right: calc(50% - 25px); }
+
+  .panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: auto !important;
+    height: min(72dvh, 720px);
+    max-height: calc(100dvh - var(--bar-h) - 62px);
+    border-right: 0;
+    border-top: 1px solid var(--line);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -18px 50px rgba(0, 0, 0, .28);
+    z-index: 75;
+    transition: transform .26s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  .panel.is-collapsed {
+    width: auto !important;
+    transform: translateY(100%);
+  }
+  .panel.is-collapsed > * { opacity: 1; pointer-events: none; }
+
+  .panel__collapse {
+    top: 9px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    background: var(--paper-warm);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transform: rotate(-90deg);
+  }
+  .panel-expand {
+    display: none !important;
+  }
+
+  .panel__head { padding: 18px 18px 12px; }
+  .panel__head h2 { font-size: 19px; padding-right: 38px; }
+  .panel__head p { font-size: 12.5px; max-width: 90%; }
+  .panel__tools { padding: 12px 18px; gap: 9px; }
+  .panel__scroll { padding: 14px 18px 24px; gap: 12px; }
+
+  .catalog-smart-tools { grid-template-columns: 1fr 1fr; }
+  .catalog-smart-tools select:last-child { grid-column: 1 / -1; }
+  .catalog-ai-row { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .catalog-ai-btn { min-height: 44px; }
+
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .product-card { min-width: 0; padding: 9px; }
+  .product-card__media { height: 104px; }
+  .product-card__name,
+  .product-card__dims,
+  .product-card__price { overflow-wrap: anywhere; }
+
+  .stage {
+    grid-row: 1;
+    grid-column: 1;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+  }
+  .stage-wrap { inset: 0; }
+
+  .viewbar { bottom: 12px; }
+  .viewbar .segmented__btn { min-height: 40px; padding: 0 14px; }
+
+  .object-bar {
+    max-width: calc(100vw - 24px);
+    left: 12px !important;
+    right: 12px;
+    width: auto !important;
+  }
+
+  .toasts { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+  .empty { padding: 18px; }
+  .empty__card { width: min(100%, 460px); }
+  .empty__card h1 { font-size: clamp(24px, 7vw, 32px); }
+  .empty__card p { font-size: 13px; }
+  .empty__actions { gap: 8px; margin-top: 20px; }
+  .empty__actions .btn { width: 100%; }
+
+  .ai-selection-studio {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    width: auto;
+    max-height: 52dvh;
+  }
+}
+
+/* Very narrow phones: keep the appbar usable instead of clipping controls. */
+@media (max-width: 430px) {
+  .appbar { gap: 5px; padding: 0 7px; }
+  .brand__mark { width: 34px; height: 34px; }
+  .doc__name { font-size: 12px; }
+  .ai-state { max-width: 76px; overflow: hidden; text-overflow: ellipsis; }
+  #summaryBtn { max-width: 92px; padding: 0 8px; font-size: 12px; }
+  .panel { height: 70dvh; max-height: calc(100dvh - var(--bar-h) - 58px); }
+  .panel__head { padding-left: 14px; padding-right: 14px; }
+  .panel__tools { padding-left: 14px; padding-right: 14px; }
+  .panel__scroll { padding-left: 14px; padding-right: 14px; }
+  .product-grid { gap: 8px; }
+  .product-card__media { height: 92px; }
+  .product-card__name { font-size: 12px; }
+  .product-card__price { font-size: 12px; }
+  .rail { padding-left: 3px; padding-right: 3px; }
+  .rail__btn { min-height: 46px; }
+  .rail__btn span { font-size: 9px; }
+}
