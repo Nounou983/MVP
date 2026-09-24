@@ -1,0 +1,43 @@
+{
+  "artifact_trace": "Phase 9.7 reusable diagnostic",
+  "artifacts": {
+    "mask_submitted.png": {
+      "source": "approximate_ui_preview_mask",
+      "width": 1408,
+      "height": 768,
+      "area_ratio": 0.10833000414299243,
+      "area_pixels": 117142,
+      "bbox_xyxy": [
+        67,
+        315,
+        1171,
+        735
+      ],
+      "connected_components": 7,
+      "note": "approximate mask derived from UI preview; not the exact network payload"
+    },
+    "alpha_map.png": {
+      "source": "binary confirmed-mask ownership alpha (diagnostic)"
+    },
+    "rorem_raw_seed2026.png": {
+      "source": "none",
+      "status": "not_captured"
+    },
+    "rorem_raw_seed11037.png": {
+      "source": "none",
+      "status": "not_captured"
+    },
+    "lama_raw.png": {
+      "source": "none",
+      "status": "not_captured"
+    },
+    "composited_final.png": {
+      "source": "runtime_artifact",
+      "status": "captured"
+    }
+  },
+  "raw_vs_final_seed11037": {
+    "status": "not_measurable",
+    "reason": "requires exact original, raw seed=11037 output, final output, and exact mask"
+  }
+}

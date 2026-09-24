@@ -1,0 +1,41 @@
+{
+  "case_id": "case_a_bed_armchair",
+  "artifacts": {
+    "mask_submitted.png": {
+      "status": "not_captured",
+      "reason": "exact runtime mask not supplied"
+    },
+    "rorem_raw_selected.png": {
+      "status": "not_captured",
+      "reason": "raw selected RORem output"
+    },
+    "lama_raw.png": {
+      "status": "not_captured",
+      "reason": "raw LaMa output"
+    },
+    "surface_raw.png": {
+      "status": "not_captured",
+      "reason": "raw surface-aware output"
+    },
+    "composited_final.png": {
+      "status": "not_captured",
+      "reason": "final composite returned/diagnostic"
+    },
+    "original.png": {
+      "status": "not_captured",
+      "reason": "exact source image"
+    }
+  },
+  "tests": {},
+  "alpha_metrics": {
+    "status": "not_measurable"
+  },
+  "compositing_invariants": {
+    "status": "not_measurable",
+    "reason": "requires exact original + mask + selected raw candidate + final composite"
+  },
+  "per_component_scores": {
+    "status": "not_measurable",
+    "reason": "requires exact original + exact mask + raw candidate"
+  }
+}

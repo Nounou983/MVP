@@ -1,0 +1,85 @@
+{
+  "schema": "phase97-round3-multicase-v1",
+  "notes": "Paths are intentionally blank because this bundle did not contain the exact RTX runtime source/mask/raw/final artifacts. Populate them from a fresh RTX run and rerun the reusable tracer.",
+  "cases": [
+    {
+      "id": "case_a_bed_armchair",
+      "description": "Case A: 12.26% mask, bed+armchair, HTTP 422 honest failure",
+      "mask": null,
+      "image": null,
+      "rorem_raw_selected": null,
+      "lama_raw": null,
+      "surface_raw": null,
+      "final": null,
+      "runtime_metadata": {
+        "mask_area_ratio": 0.1226,
+        "bbox_xyxy_inclusive": [
+          578,
+          353,
+          1172,
+          736
+        ],
+        "size": [
+          1408,
+          768
+        ],
+        "result_http": 422
+      }
+    },
+    {
+      "id": "case_b_nightstand_chair",
+      "description": "Case B: 3.72% mask, nightstand+chair, direct RORem accepted, visibly ghosted",
+      "mask": null,
+      "image": null,
+      "rorem_raw_selected": null,
+      "lama_raw": null,
+      "surface_raw": null,
+      "final": null,
+      "runtime_metadata": {
+        "mask_area_ratio": 0.0372,
+        "bbox_xyxy_inclusive": [
+          202,
+          432,
+          1408,
+          824
+        ],
+        "size": [
+          1536,
+          1024
+        ],
+        "result_http": 200,
+        "rorem_selected": {
+          "seed": 11037,
+          "seam": 4.94,
+          "furniture_penalty": 0.466,
+          "target_change": 0.266,
+          "residual_structure": 0.172,
+          "texture_ratio": 1.59,
+          "surface_consistency": 0.882
+        }
+      }
+    },
+    {
+      "id": "case_c_surface_ensemble",
+      "description": "Case C: 2.19% mask, surface-aware wall+floor partition path, HTTP 200",
+      "mask": null,
+      "image": null,
+      "rorem_raw_selected": null,
+      "lama_raw": null,
+      "surface_raw": null,
+      "final": null,
+      "runtime_metadata": {
+        "mask_area_ratio": 0.0219,
+        "bbox_xyxy_inclusive": [
+          57,
+          419,
+          338,
+          637
+        ],
+        "result_http": 200,
+        "path": "Phase9.7 surface-aware ensemble PASSED removal gate",
+        "source_note": "Exact remaining metrics were not present in the supplied bundle."
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "glossy_blob": {
+    "old": {
+      "surface_consistency": 0.2514011319953048,
+      "gate": true
+    },
+    "new": {
+      "surface_consistency": 0.2514011319953048,
+      "min_required": 0.6,
+      "gate": false
+    }
+  },
+  "reasonable_low_change": {
+    "old": {
+      "target_change": 0.163,
+      "gate": false
+    },
+    "new": {
+      "target_change": 0.163,
+      "gate": true
+    }
+  },
+  "real_case_fp_0.6774": {
+    "old_threshold": 0.7,
+    "old_gate": true,
+    "new_threshold": 0.6,
+    "new_gate": false
+  },
+  "thresholds": {
+    "max_seam": 55.0,
+    "max_furniture_penalty": 0.45,
+    "max_residual_structure": 0.45,
+    "min_texture_ratio": 0.35,
+    "min_surface_consistency": 0.6,
+    "residual_structure_abs_floor": 0.02,
+    "residual_structure_rel_multiplier": 1.15,
+    "noop_target_change": 0.02,
+    "surface_partition_min_texture_wall_floor": 0.22,
+    "surface_partition_min_texture_other": 0.08,
+    "surface_partition_min_change": 0.28,
+    "surface_partition_max_residual": 0.55,
+    "surface_partition_max_seam": 65.0,
+    "surface_partition_max_furniture_penalty": 0.72,
+    "surface_lama_min_change": 0.28,
+    "surface_lama_max_residual": 0.6,
+    "surface_lama_max_seam": 70.0,
+    "surface_lama_max_furniture_penalty": 0.78
+  },
+  "real_case_fp_0.4660": {
+    "old_threshold": 0.6,
+    "old_gate": true,
+    "new_threshold": 0.45,
+    "new_gate": false,
+    "note": "Case B real RTX value; exact raw output not present in bundle."
+  }
+}

@@ -1,0 +1,4 @@
+-r ../../server/requirements.txt
+gradio>=4.44
+spaces>=0.40
+starlette>=0.40

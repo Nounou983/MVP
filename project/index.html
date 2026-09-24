@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#101115" />
+  <title>La Cigogne D'Ailleurs — Aménagez votre pièce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="deployment-config.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===================== BARRE SUPÉRIEURE ===================== -->
+    <header class="appbar">
+      <a class="brand" href="#" aria-label="La Cigogne D'Ailleurs">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M7 23.5c4.4-7.2 7.7-13 11.8-13 2.8 0 4.8 1.9 4.8 4.5 0 4.2-4.4 7.6-9.8 7.6H7Z" fill="currentColor" opacity=".18"/><path d="M8 23c5.1-6.7 7.1-13 11.1-13 2.2 0 4.2 1.5 4.2 3.8 0 4-4.5 7.4-10.5 7.4H8Z" stroke="currentColor" stroke-width="1.8"/><path d="M12.2 20.9c2.5-2.7 4.4-5.4 6.5-7.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand__text">La Cigogne D'Ailleurs</span>
+      </a>
+
+      <div class="doc">
+        <span id="sceneName" class="doc__name" contenteditable="true" spellcheck="false" role="textbox" aria-label="Nom de la composition">Ma composition</span>
+        <span id="totalCount" class="doc__meta">Pièce vide</span>
+      </div>
+
+      <div class="appbar__actions">
+        <div class="btn-group" role="group" aria-label="Historique">
+          <button id="undoBtn" class="icon-btn" type="button" title="Annuler (Ctrl+Z)" aria-label="Annuler" disabled>
+            <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h9a7 7 0 0 1 0 14h-3"/></svg>
+          </button>
+          <button id="redoBtn" class="icon-btn" type="button" title="Rétablir (Ctrl+Maj+Z)" aria-label="Rétablir" disabled>
+            <svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9h-9a7 7 0 0 0 0 14h3"/></svg>
+          </button>
+        </div>
+
+        <span id="aiState" class="ai-state">IA prête</span>
+
+        <div class="total">
+          <small>Total estimé</small>
+          <strong id="totalPrice">0 DA</strong>
+        </div>
+
+        <button id="previewBtn" class="btn btn--quiet" type="button">Aperçu</button>
+        <button id="exportBtn" class="btn btn--quiet" type="button">Exporter</button>
+        <button id="summaryBtn" class="btn btn--primary" type="button">Récapitulatif</button>
+        <button id="newDesignBtn" class="icon-btn" type="button" title="Vider la pièce" aria-label="Vider la pièce">
+          <svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+
+      <!-- ========================= RAIL ========================= -->
+      <nav id="rail" class="rail" aria-label="Sections">
+        <button class="rail__btn is-active" type="button" data-panel="catalog" aria-pressed="true">
+          <svg viewBox="0 0 24 24"><path d="M5 10V7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5V10M4 10h16v7H4zM7 17v2M17 17v2M8 10v3M16 10v3"/></svg>
+          <span>Meubles</span>
+        </button>
+        <button class="rail__btn" type="button" data-panel="room" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><path d="M4 8.5 12 4l8 4.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 20v-6h6v6"/></svg>
+          <span>Pièce</span>
+        </button>
+        <button class="rail__btn" type="button" data-panel="ai" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><path d="m13 4 1.6 4.4L19 10l-4.4 1.6L13 16l-1.6-4.4L7 10l4.4-1.6z"/><path d="M6 16.5 6.7 18.4 8.6 19l-1.9.7L6 21.6 5.3 19.7 3.4 19l1.9-.6z"/></svg>
+          <span>Retouche</span>
+        </button>
+        <button class="rail__btn" type="button" data-panel="summary" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><path d="M6 4h12a1 1 0 0 1 1 1v15l-3.5-2-3.5 2-3.5-2L5 20V5a1 1 0 0 1 1-1z"/><path d="M9 9h6M9 13h4"/></svg>
+          <span>Liste</span>
+          <b id="railSummaryBadge" class="rail__badge" hidden>0</b>
+        </button>
+        <button class="rail__btn" type="button" data-panel="projects" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h3l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
+          <span>Projets</span>
+          <b id="railProjectDot" class="rail__dot" hidden aria-label="Modifications non enregistrées"></b>
+        </button>
+        <span class="rail__spacer"></span>
+        <button class="rail__btn" type="button" data-panel="account" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+          <span>Compte</span>
+        </button>
+        <button class="rail__btn" type="button" data-panel="help" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.8c0 1.7-2.4 2.1-2.4 3.7"/><path d="M12 17.2h.01"/></svg>
+          <span>Aide</span>
+        </button>
+      </nav>
+
+      <!-- ========================= PANNEAU ========================= -->
+      <aside id="panel" class="panel" aria-label="Panneau latéral">
+        <button id="panelCollapse" class="panel__collapse" type="button" aria-label="Réduire le panneau">
+          <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg>
+        </button>
+
+        <!-- ---------- Catalogue ---------- -->
+        <section class="panel__view is-active" data-view="catalog">
+          <header class="panel__head">
+            <h2>Meubles</h2>
+            <p>Glissez un meuble sur la photo, ou cliquez pour le poser au centre.</p>
+          </header>
+          <div class="panel__tools">
+            <label class="search">
+              <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg>
+              <input id="catalogSearch" type="search" placeholder="Rechercher un meuble" autocomplete="off" aria-label="Rechercher un meuble">
+            </label>
+            <div id="catalogFilters" class="chips" role="group" aria-label="Familles"></div>
+            <div class="catalog-smart-tools" aria-label="Filtres intelligents du catalogue">
+              <select id="catalogStyleFilter" aria-label="Style">
+                <option value="all">Tous les styles</option>
+                <option value="moderne">Moderne</option>
+                <option value="scandinave">Scandinave</option>
+                <option value="bohème">Bohème</option>
+                <option value="classique">Classique</option>
+                <option value="industriel">Industriel</option>
+                <option value="naturel">Naturel</option>
+              </select>
+              <select id="catalogMaterialFilter" aria-label="Matière">
+                <option value="all">Toutes matières</option>
+                <option value="bois">Bois</option>
+                <option value="tissu">Tissu</option>
+                <option value="métal">Métal</option>
+                <option value="laine">Laine</option>
+                <option value="rotin">Rotin</option>
+              </select>
+              <select id="catalogSort" aria-label="Trier">
+                <option value="recommended">Recommandés</option>
+                <option value="price-asc">Prix croissant</option>
+                <option value="price-desc">Prix décroissant</option>
+                <option value="name">Nom A–Z</option>
+                <option value="size">Petits espaces</option>
+              </select>
+            </div>
+            <div class="catalog-ai-row">
+              <button id="catalogAssistantBtn" class="catalog-ai-btn" type="button">✨ Décrire ce que vous cherchez</button>
+              <span>Recherche naturelle · placement assisté</span>
+            </div>
+            <div id="catalogNotice" class="panel__notice" hidden></div>
+          </div>
+          <div class="panel__scroll">
+            <div id="catalog" class="product-grid"></div>
+            <p id="catalogEmpty" class="panel__empty" hidden>Aucun meuble ne correspond à cette recherche.</p>
+          </div>
+        </section>
+
+        <!-- ---------- Produit sélectionné ---------- -->
+        <section class="panel__view" data-view="product">
+          <header class="panel__head panel__head--tight">
+            <button id="productBack" class="link-back" type="button">
+              <svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg> Catalogue
+            </button>
+            <div class="product-hero">
+              <span id="productThumb" class="product-hero__media"></span>
+              <div class="product-hero__copy">
+                <h2 id="productName">Meuble</h2>
+                <p id="productBlurb"></p>
+                <strong id="productPrice">—</strong>
+              </div>
+            </div>
+          </header>
+          <div class="panel__scroll">
+            <div id="inspectorBody"></div>
+            <section id="productCommerce" class="card card--commerce" hidden></section>
+            <section id="similarBlock" class="similar" hidden>
+              <h3>Remplacer par</h3>
+              <div id="similarRow" class="similar-row"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ---------- Pièce ---------- -->
+        <section class="panel__view" data-view="room">
+          <header class="panel__head">
+            <h2>Votre pièce</h2>
+            <p>Une photo prise de face, bien éclairée, donne le meilleur résultat.</p>
+          </header>
+          <div class="panel__scroll">
+            <div id="roomCard" class="card card--room">
+              <div class="card__row">
+                <span class="card__label">Photo</span>
+                <span id="roomState" class="card__value">Aucune photo</span>
+              </div>
+              <button class="btn btn--primary btn--block" type="button" data-import-room>Importer une photo</button>
+              <p class="card__hint">JPG, PNG ou WebP — vous pouvez aussi déposer le fichier sur la pièce.</p>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title">Commencer avec un exemple</h3>
+              <div id="sampleRow" class="sample-row"></div>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title">Analyse de l'espace</h3>
+              <p class="card__hint">L'IA repère le sol, la profondeur et les meubles déjà présents pour poser vos meubles à la bonne échelle.</p>
+              <button id="analyzeAction" class="btn btn--dark btn--block" type="button">Analyser la pièce</button>
+
+              <div id="analysisResult" class="analysis" hidden>
+                <div class="analysis__row"><span>Sol</span><b id="analysisFloor">—</b></div>
+                <div class="analysis__row"><span>Objets repérés</span><b id="analysisObjects">0</b></div>
+              </div>
+
+              <div id="overlayGroup" class="overlay-group" hidden>
+                <span class="card__label">Calques de contrôle</span>
+                <div class="overlay-toggles">
+                  <label id="maskLabel" class="toggle"><input id="maskChk" type="checkbox">Sol</label>
+                  <label id="depthLabel" class="toggle"><input id="depthChk" type="checkbox">Profondeur</label>
+                  <label id="zonesLabel" class="toggle"><input id="zonesChk" type="checkbox">Objets</label>
+                </div>
+              </div>
+            </div>
+
+            <div id="roomGeometry" class="card card--geometry" hidden>
+              <h3 class="card__title">Géométrie estimée</h3>
+              <div class="geometry">
+                <strong id="roomDims">—</strong>
+                <small id="roomDimsDetail"></small>
+              </div>
+              <div class="card__row">
+                <span class="card__label">Ouvertures</span>
+                <b id="roomOpenings" class="card__value">—</b>
+              </div>
+              <div class="usage">
+                <div class="usage__head"><span>Confiance</span><b id="roomConfidence">0 %</b></div>
+                <div class="usage__track"><i id="roomConfidenceBar" style="width:0%"></i></div>
+              </div>
+              <p id="roomAssumption" class="card__hint"></p>
+            </div>
+
+            <div id="spatialCard" class="card card--spatial" hidden>
+              <div class="spatial-head">
+                <div>
+                  <h3 class="card__title">Placement intelligent</h3>
+                  <p class="card__hint">La scène tient compte de la profondeur, du sol détecté et des relations entre meubles.</p>
+                </div>
+                <span id="spatialBadge" class="spatial-badge">Prêt</span>
+              </div>
+              <button id="spatialOptimizeBtn" class="btn btn--dark btn--block" type="button">Optimiser la composition</button>
+              <div id="spatialResult" class="spatial-result" hidden></div>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title">Vue 3D</h3>
+              <p class="card__hint">Les meubles deviennent des volumes éclairés comme la photo. Vous pouvez les déplacer directement dans la scène.</p>
+              <div id="threeModeGroup" class="segmented segmented--light" role="group" aria-label="Cadrage 3D" hidden>
+                <button class="segmented__btn is-active" type="button" data-3dmode="photo">Caler sur la photo</button>
+                <button class="segmented__btn" type="button" data-3dmode="orbit">Tourner autour</button>
+              </div>
+              <button id="glbAction" class="btn btn--block" type="button">Importer un modèle 3D (.glb)</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------- Retouche IA ---------- -->
+        <section class="panel__view" data-view="ai">
+          <header class="panel__head">
+            <h2>Retouche IA</h2>
+            <p>Retirez un meuble réel de la photo : l'IA reconstruit le mur et le sol derrière.</p>
+          </header>
+          <div class="panel__scroll">
+            <div class="card card--ai">
+              <ol class="steps">
+                <li id="eraseStep1"><span>1</span> Activez la gomme intelligente</li>
+                <li id="eraseStep2"><span>2</span> Cliquez sur un ou plusieurs objets dans la photo</li>
+                <li><span>3</span> Vérifiez la sélection puis confirmez</li>
+              </ol>
+              <button id="eraseAction" class="btn btn--ai btn--block" type="button">Effacer un objet</button>
+              <p class="card__hint">Fonctionne sur les meubles déjà présents sur la photo. Les meubles que vous ajoutez se retirent d'un clic droit sur leur fiche.</p>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title">Bon à savoir</h3>
+              <ul class="bullets">
+                <li>Le premier effacement télécharge le modèle : comptez quelques minutes.</li>
+                <li>Vous pouvez sélectionner plusieurs objets puis les supprimer en une seule opération.</li>
+                <li>Annulez à tout moment avec Ctrl+Z, la photo d'origine est conservée.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------- Récapitulatif ---------- -->
+        <section class="panel__view" data-view="summary">
+          <header class="panel__head">
+            <h2>Votre liste</h2>
+            <p>Les meubles posés dans la pièce et leur prix indicatif.</p>
+          </header>
+          <div class="panel__scroll">
+            <div id="summaryList" class="summary-list"></div>
+          </div>
+          <footer class="panel__foot">
+            <div class="panel__total"><span>Total</span><strong id="summaryTotal">0 DA</strong></div>
+            <div class="panel__foot-actions">
+              <button id="summaryClear" class="btn btn--quiet" type="button">Tout retirer</button>
+              <button class="btn btn--primary" type="button" onclick="document.getElementById('exportBtn').click()">Exporter l'image</button>
+            </div>
+          </footer>
+        </section>
+
+        <!-- ---------- Projets ---------- -->
+        <section class="panel__view" data-view="projects">
+          <header class="panel__head">
+            <h2>Projets</h2>
+            <p>Enregistrez une pièce, rouvrez-la plus tard, partagez-la avec votre client.</p>
+          </header>
+          <div class="panel__scroll"></div>
+        </section>
+
+        <!-- ---------- Compte ---------- -->
+        <section class="panel__view" data-view="account">
+          <header class="panel__head">
+            <h2>Compte</h2>
+            <p>Facultatif : l'application fonctionne entièrement sans compte.</p>
+          </header>
+          <div class="panel__scroll"></div>
+        </section>
+
+        <!-- ---------- Aide ---------- -->
+        <section class="panel__view" data-view="help">
+          <header class="panel__head">
+            <h2>Aide</h2>
+            <p>Tout se pilote directement sur la photo.</p>
+          </header>
+          <div class="panel__scroll">
+            <div class="card">
+              <h3 class="card__title">Sur la photo</h3>
+              <ul class="bullets">
+                <li>Faites glisser un meuble pour le déplacer, il se repose sur le sol.</li>
+                <li>Poignée du haut : tourner. Poignée d'angle : agrandir.</li>
+                <li>Molette : tourner. Ctrl + molette : redimensionner.</li>
+                <li>Maj pendant un déplacement : réglage fin.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 class="card__title">Raccourcis</h3>
+              <dl class="shortcuts">
+                <dt>Ctrl + Z</dt><dd>Annuler</dd>
+                <dt>Ctrl + Maj + Z</dt><dd>Rétablir</dd>
+                <dt>Suppr</dt><dd>Retirer le meuble</dd>
+                <dt>Ctrl + D</dt><dd>Dupliquer</dd>
+                <dt>Flèches</dt><dd>Déplacer au pixel</dd>
+                <dt>1 / 2</dt><dd>Vue photo / vue 3D</dd>
+                <dt>E</dt><dd>Gomme intelligente</dd>
+                <dt>F / D / Z</dt><dd>Calques sol, profondeur, objets</dd>
+                <dt>Ctrl + S</dt><dd>Enregistrer le projet</dd>
+                <dt>Alt + glisser</dt><dd>Placement libre (sans aimantation)</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <button id="panelExpand" class="panel-expand" type="button" aria-label="Afficher le panneau">
+        <svg viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></svg>
+      </button>
+
+      <!-- ========================== SCÈNE ========================== -->
+      <section id="stage-area" class="stage">
+        <div id="viewport" class="stage-wrap" aria-label="Votre pièce">
+          <canvas id="stage" aria-label="Photo de la pièce"></canvas>
+          <canvas id="threeStage" aria-label="Vue 3D de la pièce"></canvas>
+
+          <!-- Barre contextuelle du meuble sélectionné -->
+          <div id="objectBar" class="object-bar" aria-hidden="true">
+            <span id="objectBarName" class="object-bar__name">Meuble</span>
+            <span class="object-bar__sep"></span>
+            <button class="object-bar__btn" type="button" data-act="rotate">
+              <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/></svg><b>Tourner</b>
+            </button>
+            <button class="object-bar__btn" type="button" data-act="duplicate">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg><b>Dupliquer</b>
+            </button>
+            <button class="object-bar__btn" type="button" data-act="options">
+              <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><b>Options</b>
+            </button>
+            <button class="object-bar__btn object-bar__btn--danger" type="button" data-act="delete">
+              <svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/></svg><b>Retirer</b>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bandeau du parcours gomme IA -->
+        <div id="aiBanner" class="ai-banner" data-phase="idle">
+          <span class="ai-banner__pulse" aria-hidden="true"></span>
+          <div class="ai-banner__copy">
+            <strong id="aiBannerTitle">Cliquez sur l'objet à effacer</strong>
+            <small id="aiBannerHint">Visez un meuble réel de la photo.</small>
+          </div>
+          <button id="aiConfirm" class="btn btn--ai" type="button" hidden>Confirmer</button>
+          <button id="aiCancel" class="btn btn--quiet" type="button">Annuler</button>
+        </div>
+
+        <!-- Progression IA -->
+        <div id="aiProcessing" class="ai-processing" aria-live="polite" aria-hidden="true">
+          <span class="spinner" aria-hidden="true"></span>
+          <span id="aiProcessingText">L'IA travaille sur votre pièce…</span>
+        </div>
+
+        <!-- Commandes de vue -->
+        <div class="viewbar">
+          <div class="segmented" role="group" aria-label="Mode de vue">
+            <button id="viewPhoto" class="segmented__btn is-active" type="button">Photo</button>
+            <button id="viewThree" class="segmented__btn" type="button">Vue 3D</button>
+          </div>
+        </div>
+
+        <div id="toasts" class="toasts" aria-live="polite"></div>
+
+        <!-- Écran d'accueil -->
+        <div id="emptyState" class="empty">
+          <div class="empty__card">
+            <span class="empty__kicker">La Cigogne D'Ailleurs</span>
+            <h1>Voyez vos meubles chez vous avant d'acheter.</h1>
+            <p>Importez une photo de votre pièce, posez des meubles à l'échelle réelle, et effacez ceux que vous voulez remplacer.</p>
+            <div class="empty__actions">
+              <button class="btn btn--primary btn--lg" type="button" data-import-room>Importer une photo</button>
+              <button class="btn btn--quiet btn--lg" type="button" onclick="window.CigogneUI.showView('room')">Voir un exemple</button>
+            </div>
+            <small>Vos photos restent sur votre machine.</small>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Assistant IA catalogue : recherche naturelle + actions sur la composition. -->
+  <div id="aiAssistant" class="ai-assistant" aria-hidden="true">
+    <div class="ai-assistant__backdrop" data-assistant-close></div>
+    <section class="ai-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby="aiAssistantTitle">
+      <header class="ai-assistant__head">
+        <div>
+          <span class="ai-assistant__eyebrow">ASSISTANT IA</span>
+          <h2 id="aiAssistantTitle">Imaginez votre pièce</h2>
+          <p>Décrivez un meuble, un style ou une action. L'assistant utilise votre catalogue et peut placer les meubles directement.</p>
+        </div>
+        <button class="ai-assistant__close" type="button" data-assistant-close aria-label="Fermer">×</button>
+      </header>
+      <div id="aiAssistantQuick" class="ai-assistant__quick" aria-label="Suggestions rapides"></div>
+      <div id="aiAssistantMessages" class="ai-assistant__messages" aria-live="polite"></div>
+      <div class="ai-assistant__composer">
+        <textarea id="aiAssistantInput" rows="2" placeholder="Ex. : Ajoute un canapé moderne beige et une table basse devant…" aria-label="Commande à l'assistant"></textarea>
+        <button id="aiAssistantSend" class="btn btn--ai" type="button">Envoyer</button>
+      </div>
+      <div class="ai-assistant__hint">Astuce : « ajoute 2 lampes de chaque côté du canapé », « remplace par un fauteuil », « rends-le 20 % plus petit »…</div>
+    </section>
+  </div>
+
+  <!-- Entrées fichiers + boutons pilotés par les modules existants. -->
+  <input id="roomUpload" type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden />
+  <input id="glbUpload" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" hidden />
+  <div class="compat" aria-hidden="true">
+    <span id="status">Prêt</span>
+    <button id="analyzeBtn" type="button">Analyser</button>
+    <button id="eraserBtn" type="button">✨ Supprimer IA</button>
+    <button id="undoAiBtn" type="button" disabled>Annuler IA</button>
+    <button id="photoModeBtn" type="button" class="active">Photo</button>
+    <button id="threeModeBtn" type="button">Vue 3D</button>
+  </div>
+
+  <!-- Socle : configuration, client API, mesure d'usage. -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/analytics.js"></script>
+
+  <!-- Données produit et aides spatiales, avant le moteur de rendu. -->
+  <script src="js/furniture-data.js"></script>
+  <script src="js/assets.js"></script>
+  <script src="js/placement.js"></script>
+  <script src="js/room-model.js"></script>
+  <script src="js/spatial-intelligence.js"></script>
+
+  <!-- Moteur, interface, puis les modules qui s'y accrochent. -->
+  <script src="js/app.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script src="js/room-sync.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/account.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/eraser.js"></script>
+  <script src="js/realistic-rendering.js"></script>
+  <script>
+    // Le module 3D est chargé à la demande, après que App existe.
+    window.Phase3Boot = window.Phase3Boot || (async () => {
+      if (window.Phase3) return window.Phase3;
+      try {
+        await import('./js/phase3.js?build=540');
+        return window.Phase3 || null;
+      } catch (err) {
+        console.error('[Phase3D] chargement impossible', err);
+        window.App?.setStatus?.('La vue 3D est momentanément indisponible.');
+        return null;
+      }
+    })();
+  </script>
+  <script src="js/phase3e.js"></script>
+</body>
+</html>

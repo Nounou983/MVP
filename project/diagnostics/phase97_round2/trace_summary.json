@@ -1,0 +1,37 @@
+{
+  "source_zip_sha256": "138e7b131de422bbe6fdc8b99310d5aaac1e05d1b9b207a6e00a6d9fd579526f",
+  "original_runtime": {
+    "selected_seed": 11037,
+    "selected_furniture_penalty": 0.6774,
+    "final_recheck_furniture_penalty": 0.6770,
+    "passed_gate": true,
+    "http_status": 200
+  },
+  "gate": {
+    "old_max_furniture_penalty": 0.70,
+    "new_max_furniture_penalty": 0.60,
+    "exact_0.6774_old": true,
+    "exact_0.6774_new": false
+  },
+  "compositing_synthetic": {
+    "old_inside_alpha_min": 0.5615077615,
+    "old_inside_alpha_lt_1_pixels": 504,
+    "old_inside_pixels": 2000,
+    "old_outside_alpha_max": 0.0,
+    "new_inside_alpha_min": 1.0,
+    "new_inside_alpha_max": 1.0,
+    "new_outside_max_difference": 0
+  },
+  "b2_synthetic": {
+    "glossy_surface_consistency": 0.2514011319953048,
+    "glossy_gate_current": false,
+    "low_change_target_change": 0.163,
+    "low_change_gate_current": true
+  },
+  "tests": {
+    "pytest_passed": 83,
+    "pytest_runtime_seconds": 10.32,
+    "node_check_eraser": true,
+    "nvidia_runtime_available_here": false
+  }
+}

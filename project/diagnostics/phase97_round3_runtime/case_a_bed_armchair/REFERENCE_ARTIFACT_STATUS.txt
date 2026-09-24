@@ -1,0 +1,1 @@
+REFERENCE ONLY. Screenshot evidence is not the exact browser-uploaded mask or raw neural output. Exact artifacts require an RTX run with CIGOGNE_PHASE97_CAPTURE_DIR enabled.

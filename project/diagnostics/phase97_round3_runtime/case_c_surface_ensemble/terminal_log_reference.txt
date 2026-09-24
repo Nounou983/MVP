@@ -1,0 +1,203 @@
+Loading AI models (device=CUDA)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|███████████████████████████████████████████████████████████| 287/287 [00:00<00:00, 3224.91it/s]
+Loading weights: 100%|██████████████████████████████████████████████████████████| 644/644 [00:00<00:00, 30608.07it/s]
+AI models ready.
+Loading SAM point-refiner (device=cuda)...
+Loading weights: 100%|███████████████████████████████████████████████████████████| 314/314 [00:00<00:00, 3409.84it/s]
+SAM point-refiner ready.
+Mask Engine V4.2: accepted 6 independent physical-part candidate(s)
+Mask Engine V4.2: method=box-1, candidates=9, area_ratio=0.1058, confidence=0.906, neighbor_overlap=0.089, neighbor_outside=0.086, score=11.631
+INFO:     127.0.0.1:55537 - "POST /select-mask HTTP/1.1" 200 OK
+[Phase 9.1] mask=12.26% bbox=(578,353)-(1172,736) size=(1408, 768)
+W0921 23:33:10.950000 22232 site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+[transformers] `Siglip2ImageProcessorFast` is deprecated. The `Fast` suffix for image processors has been removed; use `Siglip2ImageProcessor` instead.
+Loading RORem object-removal model (LetsThink/RORem) with native checkpoint weights...
+Trying RORem dtype=float16 (no variant override)...
+C:\Users\pc\AppData\Local\Python\pythoncore-3.12-64\Lib\site-packages\huggingface_hub\utils\_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Loading pipeline components...:   0%|                                                          | 0/7 [00:00<?, ?it/s]The config attributes {'decay': 0.9999, 'inv_gamma': 1.0, 'min_decay': 0.0, 'optimization_step': 37000, 'power': 0.6666666666666666, 'update_after_step': 0, 'use_ema_warmup': False} were passed to UNet2DConditionModel, but are not expected and will be ignored. Please verify your config.json configuration file.
+Loading weights: 100%|███████████████████████████████████████████████████████████| 196/196 [00:00<00:00, 3473.40it/s]
+Loading weights: 100%|███████████████████████████████████████████████████████████| 517/517 [00:00<00:00, 3437.35it/s]
+Loading pipeline components...: 100%|██████████████████████████████████████████████████| 7/7 [00:01<00:00,  6.32it/s]
+RORem checkpoint loaded with dtype=float16.
+RORem object-removal model READY (native checkpoint weights).
+100%|████████████████████████████████████████████████████████████████████████████████| 39/39 [00:22<00:00,  1.73it/s]
+    [residual_structure] inner=0.1116 outer=0.1971 floor=0.2266 excess=0.0000
+    [texture_ratio] inside_var=206.2 outside_var=1372.8 ratio=0.150
+    [surface_consistency] L=0.803 a=0.787 b=0.941 score=0.826
+Phase9.3 RORem seed=2026 ctx=0.14 dil=0: score=203.40, seam=31.42, furniture_penalty=0.7289, target_change=0.411, residual_structure=0.000, texture_ratio=0.15, surface_consistency=0.826
+100%|████████████████████████████████████████████████████████████████████████████████| 39/39 [00:09<00:00,  4.13it/s]
+    [residual_structure] inner=0.1335 outer=0.1726 floor=0.1985 excess=0.0000
+    [texture_ratio] inside_var=177.5 outside_var=1372.8 ratio=0.129
+    [surface_consistency] L=0.737 a=0.822 b=0.951 score=0.801
+Phase9.3 RORem seed=7319 ctx=0.20 dil=6: score=219.26, seam=42.88, furniture_penalty=0.6620, target_change=0.411, residual_structure=0.000, texture_ratio=0.13, surface_consistency=0.801
+100%|████████████████████████████████████████████████████████████████████████████████| 39/39 [00:09<00:00,  4.16it/s]
+    [residual_structure] inner=0.1309 outer=0.1437 floor=0.1652 excess=0.0000
+    [texture_ratio] inside_var=170.4 outside_var=1372.8 ratio=0.124
+    [surface_consistency] L=0.712 a=0.744 b=0.945 score=0.767
+Phase9.3 RORem seed=11037 ctx=0.28 dil=12: score=227.45, seam=58.53, furniture_penalty=0.5555, target_change=0.414, residual_structure=0.000, texture_ratio=0.12, surface_consistency=0.767
+100%|████████████████████████████████████████████████████████████████████████████████| 39/39 [00:09<00:00,  3.96it/s]
+    [residual_structure] inner=0.1272 outer=0.1834 floor=0.2109 excess=0.0000
+    [texture_ratio] inside_var=196.5 outside_var=1372.8 ratio=0.143
+    [surface_consistency] L=0.803 a=0.819 b=0.915 score=0.829
+Phase9.3 RORem seed=17041 ctx=0.40 dil=4: score=208.82, seam=36.01, furniture_penalty=0.6992, target_change=0.425, residual_structure=0.000, texture_ratio=0.14, surface_consistency=0.829
+100%|████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.34it/s]
+    [residual_structure] inner=0.1196 outer=0.1679 floor=0.1931 excess=0.0000
+    [texture_ratio] inside_var=162.9 outside_var=1372.8 ratio=0.119
+    [surface_consistency] L=0.718 a=0.895 b=0.926 score=0.804
+Phase9.3 RORem seed=24019 ctx=0.52 dil=6: score=234.76, seam=51.00, furniture_penalty=0.6821, target_change=0.407, residual_structure=0.000, texture_ratio=0.12, surface_consistency=0.804
+Phase9.3 RORem selected seed=2026: score=203.40, seam=31.42, furniture_penalty=0.7289, target_change=0.411, residual_structure=0.000, texture_ratio=0.15, passed_gate=False
+    [residual_structure] inner=0.1111 outer=0.1968 floor=0.2263 excess=0.0000
+    [texture_ratio] inside_var=208.0 outside_var=1372.8 ratio=0.151
+    [surface_consistency] L=0.805 a=0.785 b=0.940 score=0.827
+Phase9.3 RORem final recheck: seam=31.32 fp=0.7298 change=0.411 residual=0.000 texture_ratio=0.15 surface_consistency=0.827
+Phase9.3 RORem rejected its gate -> recovery tiers: seam=31.32 fp=0.7298 change=0.411 residual=0.000 texture_ratio=0.15 surface_consistency=0.827
+    [residual_structure] inner=0.0247 outer=0.1904 floor=0.2189 excess=0.0000
+    [texture_ratio] inside_var=22.0 outside_var=1372.8 ratio=0.016
+    [surface_consistency] L=0.804 a=0.894 b=0.987 score=0.863
+Phase9.4 surface candidate: score=247.76, seam=7.81, furniture_penalty=0.7176, target_change=0.290, residual_structure=0.000, texture_ratio=0.02, surfaces={'wall': 454, 'floor': 49618, 'rug': 82503, 'unknown': 948769}
+[transformers] You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+100%|████████████████████████████████████████████████████████████████████████████████| 39/39 [00:09<00:00,  4.11it/s]
+    [residual_structure] inner=0.0496 outer=0.1552 floor=0.1784 excess=0.0000
+    [texture_ratio] inside_var=89.2 outside_var=1794.9 ratio=0.050
+    [surface_consistency] L=0.678 a=0.729 b=0.639 score=0.683
+Phase9.7 surface=rug ratio=0.622: score=267.27 seam=30.84 fp=0.863 change=0.324 residual=0.000 texture=0.05 surface=0.683
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.44it/s]
+    [residual_structure] inner=0.0609 outer=0.0965 floor=0.1110 excess=0.0000
+    [texture_ratio] inside_var=118.3 outside_var=1109.9 ratio=0.107
+    [surface_consistency] L=0.959 a=0.925 b=0.902 score=0.939
+Phase9.7 surface=floor ratio=0.374: score=234.64 seam=45.46 fp=0.674 change=0.365 residual=0.000 texture=0.11 surface=0.939
+Loading LaMa inpainting model...
+LaMa ready.
+    [residual_structure] inner=0.0935 outer=0.2354 floor=0.2707 excess=0.0000
+    [texture_ratio] inside_var=598.0 outside_var=1794.9 ratio=0.333
+    [surface_consistency] L=0.941 a=0.794 b=0.816 score=0.879
+Phase9.7 surface=rug LaMa recovery: seam=28.16 fp=0.930 change=0.376 residual=0.000 texture=0.33
+    [residual_structure] inner=0.0504 outer=0.1532 floor=0.1762 excess=0.0000
+    [texture_ratio] inside_var=385.8 outside_var=1109.9 ratio=0.348
+    [surface_consistency] L=0.941 a=0.856 b=0.900 score=0.912
+Phase9.7 surface=floor LaMa recovery: seam=65.07 fp=0.370 change=0.373 residual=0.000 texture=0.35
+Phase9.7 surface ensemble rejected: accepted=1 substantial=2
+    [residual_structure] inner=0.0457 outer=0.2090 floor=0.2404 excess=0.0000
+    [texture_ratio] inside_var=316.5 outside_var=1372.8 ratio=0.231
+    [surface_consistency] L=0.957 a=0.747 b=0.934 score=0.900
+Phase9.1 LaMa recovery: seam=59.78 fp=0.0893 change=0.455 residual=0.000 texture_ratio=0.23 surface_consistency=0.900 passed_gate=False
+Phase9.7 UNCONFIRMED candidate=lama: score=129.70, seam=59.78 fp=0.0893 change=0.455 residual=0.000 texture_ratio=0.23 surface_consistency=0.900
+INFO:     127.0.0.1:56019 - "POST /inpaint HTTP/1.1" 422 Unprocessable Entity
+Mask Engine V4.2: accepted 4 independent physical-part candidate(s)
+Mask Engine V4.2: method=box-1, candidates=12, area_ratio=0.0208, confidence=0.936, neighbor_overlap=0.005, neighbor_outside=0.000, score=11.879
+INFO:     127.0.0.1:53178 - "POST /select-mask HTTP/1.1" 200 OK
+Mask Engine V4.2: accepted 6 independent physical-part candidate(s)
+Mask Engine V4.2: method=box-1, candidates=10, area_ratio=0.1058, confidence=0.906, neighbor_overlap=0.089, neighbor_outside=0.086, score=11.631
+INFO:     127.0.0.1:55656 - "POST /select-mask HTTP/1.1" 200 OK
+[Phase 9.1] mask=2.19% bbox=(57,419)-(338,637) size=(1408, 768)
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.50it/s]
+    [residual_structure] inner=0.0457 outer=0.1405 floor=0.1616 excess=0.0000
+    [texture_ratio] inside_var=270.0 outside_var=1173.7 ratio=0.230
+    [surface_consistency] L=0.842 a=0.996 b=0.811 score=0.874
+Phase9.3 RORem seed=2026 ctx=0.14 dil=0: score=74.06, seam=9.39, furniture_penalty=0.0316, target_change=0.395, residual_structure=0.000, texture_ratio=0.23, surface_consistency=0.874
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.39it/s]
+    [residual_structure] inner=0.0486 outer=0.1035 floor=0.1190 excess=0.0000
+    [texture_ratio] inside_var=200.6 outside_var=1173.7 ratio=0.171
+    [surface_consistency] L=0.877 a=0.899 b=0.865 score=0.880
+Phase9.3 RORem seed=7319 ctx=0.20 dil=6: score=112.86, seam=13.04, furniture_penalty=0.0815, target_change=0.399, residual_structure=0.000, texture_ratio=0.17, surface_consistency=0.880
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.49it/s]
+    [residual_structure] inner=0.0337 outer=0.0670 floor=0.0771 excess=0.0000
+    [texture_ratio] inside_var=151.6 outside_var=1173.7 ratio=0.129
+    [surface_consistency] L=0.802 a=0.937 b=0.834 score=0.842
+Phase9.3 RORem seed=11037 ctx=0.28 dil=12: score=141.41, seam=24.41, furniture_penalty=0.0360, target_change=0.396, residual_structure=0.000, texture_ratio=0.13, surface_consistency=0.842
+Phase9.3 RORem selected seed=2026: score=74.06, seam=9.39, furniture_penalty=0.0316, target_change=0.395, residual_structure=0.000, texture_ratio=0.23, passed_gate=False
+    [residual_structure] inner=0.0451 outer=0.1399 floor=0.1609 excess=0.0000
+    [texture_ratio] inside_var=271.0 outside_var=1173.7 ratio=0.231
+    [surface_consistency] L=0.844 a=0.997 b=0.811 score=0.875
+Phase9.3 RORem final recheck: seam=9.35 fp=0.0314 change=0.394 residual=0.000 texture_ratio=0.23 surface_consistency=0.875
+Phase9.3 RORem rejected its gate -> recovery tiers: seam=9.35 fp=0.0314 change=0.394 residual=0.000 texture_ratio=0.23 surface_consistency=0.875
+    [residual_structure] inner=0.0522 outer=0.1394 floor=0.1603 excess=0.0000
+    [texture_ratio] inside_var=33.2 outside_var=1173.7 ratio=0.028
+    [surface_consistency] L=0.966 a=0.911 b=0.975 score=0.954
+Phase9.4 surface candidate: score=243.96, seam=17.55, furniture_penalty=0.6415, target_change=0.311, residual_structure=0.000, texture_ratio=0.03, surfaces={'wall': 3572, 'floor': 20102, 'rug': 0, 'unknown': 1057670}
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:09<00:00,  3.94it/s]
+    [residual_structure] inner=0.1767 outer=0.1481 floor=0.1703 excess=0.0063
+    [texture_ratio] inside_var=1728.6 outside_var=2070.7 ratio=0.835
+    [surface_consistency] L=0.895 a=0.922 b=0.983 score=0.920
+Phase9.7 surface=wall ratio=0.151: score=88.55 seam=34.50 fp=0.506 change=0.370 residual=0.032 texture=0.83 surface=0.920
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.65it/s]
+    [residual_structure] inner=0.0331 outer=0.0675 floor=0.0776 excess=0.0000
+    [texture_ratio] inside_var=183.5 outside_var=1350.0 ratio=0.136
+    [surface_consistency] L=0.800 a=0.902 b=0.848 score=0.835
+Phase9.7 surface=floor ratio=0.849: score=144.74 seam=28.87 fp=0.061 change=0.376 residual=0.000 texture=0.14 surface=0.835
+    [residual_structure] inner=0.0499 outer=0.1607 floor=0.1849 excess=0.0000
+    [texture_ratio] inside_var=378.2 outside_var=1350.0 ratio=0.280
+    [surface_consistency] L=0.808 a=0.807 b=0.756 score=0.797
+Phase9.7 surface=floor LaMa recovery: seam=24.46 fp=0.464 change=0.387 residual=0.000 texture=0.28
+    [residual_structure] inner=0.0720 outer=0.1455 floor=0.1673 excess=0.0000
+    [texture_ratio] inside_var=627.7 outside_var=1173.7 ratio=0.535
+    [surface_consistency] L=0.832 a=0.915 b=0.780 score=0.842
+Phase9.7 surface ensemble selected: score=69.21 seam=23.94 fp=0.477 change=0.384 residual=0.000 texture=0.53 surface=0.842 surfaces={'wall': 3572, 'floor': 20102, 'rug': 0, 'unknown': 0}
+Phase9.7 surface-aware ensemble PASSED removal gate -> selected
+INFO:     127.0.0.1:62039 - "POST /inpaint HTTP/1.1" 200 OK
+Mask Engine V4.2: accepted 6 independent physical-part candidate(s)
+Mask Engine V4.2: method=box-1, candidates=9, area_ratio=0.1058, confidence=0.925, neighbor_overlap=0.090, neighbor_outside=0.087, score=11.554
+INFO:     127.0.0.1:55497 - "POST /select-mask HTTP/1.1" 200 OK
+[Phase 9.1] mask=12.30% bbox=(578,353)-(1174,736) size=(1408, 768)
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:08<00:00,  4.84it/s]
+    [residual_structure] inner=0.1199 outer=0.1946 floor=0.2238 excess=0.0000
+    [texture_ratio] inside_var=230.1 outside_var=1360.5 ratio=0.169
+    [surface_consistency] L=0.806 a=0.813 b=0.946 score=0.836
+Phase9.3 RORem seed=2026 ctx=0.14 dil=0: score=195.43, seam=32.18, furniture_penalty=0.7393, target_change=0.407, residual_structure=0.000, texture_ratio=0.17, surface_consistency=0.836
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:07<00:00,  5.08it/s]
+    [residual_structure] inner=0.1307 outer=0.1614 floor=0.1856 excess=0.0000
+    [texture_ratio] inside_var=172.5 outside_var=1360.5 ratio=0.127
+    [surface_consistency] L=0.753 a=0.823 b=0.946 score=0.809
+Phase9.3 RORem seed=7319 ctx=0.20 dil=6: score=225.79, seam=46.87, furniture_penalty=0.6749, target_change=0.410, residual_structure=0.000, texture_ratio=0.13, surface_consistency=0.809
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:07<00:00,  5.03it/s]
+    [residual_structure] inner=0.1288 outer=0.1506 floor=0.1732 excess=0.0000
+    [texture_ratio] inside_var=174.8 outside_var=1360.5 ratio=0.128
+    [surface_consistency] L=0.721 a=0.749 b=0.964 score=0.777
+Phase9.3 RORem seed=11037 ctx=0.28 dil=12: score=227.25, seam=65.03, furniture_penalty=0.5084, target_change=0.414, residual_structure=0.000, texture_ratio=0.13, surface_consistency=0.777
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:07<00:00,  5.10it/s]
+    [residual_structure] inner=0.1294 outer=0.1800 floor=0.2070 excess=0.0000
+    [texture_ratio] inside_var=194.9 outside_var=1360.5 ratio=0.143
+    [surface_consistency] L=0.793 a=0.829 b=0.913 score=0.826
+Phase9.3 RORem seed=17041 ctx=0.40 dil=4: score=215.08, seam=43.41, furniture_penalty=0.6879, target_change=0.421, residual_structure=0.000, texture_ratio=0.14, surface_consistency=0.826
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:07<00:00,  5.05it/s]
+    [residual_structure] inner=0.1202 outer=0.1584 floor=0.1822 excess=0.0000
+    [texture_ratio] inside_var=153.8 outside_var=1360.5 ratio=0.113
+    [surface_consistency] L=0.733 a=0.886 b=0.956 score=0.816
+Phase9.3 RORem seed=24019 ctx=0.52 dil=6: score=242.40, seam=55.73, furniture_penalty=0.6820, target_change=0.407, residual_structure=0.000, texture_ratio=0.11, surface_consistency=0.816
+Phase9.3 RORem selected seed=2026: score=195.43, seam=32.18, furniture_penalty=0.7393, target_change=0.407, residual_structure=0.000, texture_ratio=0.17, passed_gate=False
+    [residual_structure] inner=0.1192 outer=0.1957 floor=0.2251 excess=0.0000
+    [texture_ratio] inside_var=231.7 outside_var=1360.5 ratio=0.170
+    [surface_consistency] L=0.808 a=0.811 b=0.946 score=0.836
+Phase9.3 RORem final recheck: seam=32.25 fp=0.7398 change=0.408 residual=0.000 texture_ratio=0.17 surface_consistency=0.836
+Phase9.3 RORem rejected its gate -> recovery tiers: seam=32.25 fp=0.7398 change=0.408 residual=0.000 texture_ratio=0.17 surface_consistency=0.836
+    [residual_structure] inner=0.0260 outer=0.1896 floor=0.2180 excess=0.0000
+    [texture_ratio] inside_var=22.4 outside_var=1360.5 ratio=0.016
+    [surface_consistency] L=0.820 a=0.856 b=1.000 score=0.865
+Phase9.4 surface candidate: score=257.48, seam=8.68, furniture_penalty=0.8135, target_change=0.288, residual_structure=0.000, texture_ratio=0.02, surfaces={'wall': 500, 'floor': 49604, 'rug': 82888, 'unknown': 948352}
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:07<00:00,  5.00it/s]
+    [residual_structure] inner=0.0511 outer=0.1507 floor=0.1733 excess=0.0000
+    [texture_ratio] inside_var=89.5 outside_var=1787.9 ratio=0.050
+    [surface_consistency] L=0.678 a=0.771 b=0.659 score=0.697
+Phase9.7 surface=rug ratio=0.623: score=265.88 seam=30.95 fp=0.849 change=0.331 residual=0.000 texture=0.05 surface=0.697
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 39/39 [00:07<00:00,  5.04it/s]
+    [residual_structure] inner=0.0628 outer=0.0985 floor=0.1133 excess=0.0000
+    [texture_ratio] inside_var=133.8 outside_var=1135.7 ratio=0.118
+    [surface_consistency] L=0.982 a=0.902 b=0.910 score=0.948
+Phase9.7 surface=floor ratio=0.373: score=222.62 seam=40.27 fp=0.663 change=0.367 residual=0.000 texture=0.12 surface=0.948
+    [residual_structure] inner=0.0967 outer=0.2357 floor=0.2711 excess=0.0000
+    [texture_ratio] inside_var=598.0 outside_var=1787.9 ratio=0.334
+    [surface_consistency] L=0.909 a=0.782 b=0.780 score=0.852
+Phase9.7 surface=rug LaMa recovery: seam=33.46 fp=0.932 change=0.369 residual=0.000 texture=0.33
+    [residual_structure] inner=0.0455 outer=0.1581 floor=0.1819 excess=0.0000
+    [texture_ratio] inside_var=400.9 outside_var=1135.7 ratio=0.353
+    [surface_consistency] L=0.953 a=0.854 b=0.921 score=0.922
+Phase9.7 surface=floor LaMa recovery: seam=63.28 fp=0.392 change=0.373 residual=0.000 texture=0.35
+Phase9.7 surface ensemble rejected: accepted=1 substantial=2
+    [residual_structure] inner=0.0489 outer=0.2107 floor=0.2424 excess=0.0000
+    [texture_ratio] inside_var=317.7 outside_var=1360.5 ratio=0.234
+    [surface_consistency] L=0.966 a=0.730 b=0.957 score=0.905
+Phase9.1 LaMa recovery: seam=60.44 fp=0.0871 change=0.454 residual=0.000 texture_ratio=0.23 surface_consistency=0.905 passed_gate=False
+Phase9.7 UNCONFIRMED candidate=lama: score=128.61, seam=60.44 fp=0.0871 change=0.454 residual=0.000 texture_ratio=0.23 surface_consistency=0.905
+INFO:     127.0.0.1:64707 - "POST /inpaint HTTP/1.1" 422 Unprocessable Entity

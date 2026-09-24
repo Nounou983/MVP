@@ -1,0 +1,7 @@
+CASE B — user-supplied runtime excerpt
+[Phase 9.1] mask=3.72% bbox=(202,432)-(1408,824) size=(1536, 1024)
+RORem selected seed=11037: score=81.95, seam=4.94, furniture_penalty=0.4660, target_change=0.266, residual_structure=0.172, texture_ratio=1.59, surface_consistency=0.882, passed_gate=True
+Phase9.3 RORem final recheck: seam=4.11 fp=0.4692 change=0.266 residual=0.171 texture_ratio=1.59 surface_consistency=0.885
+INFO: /inpaint HTTP/1.1 200 OK
+
+This file is a reference log excerpt supplied with the verification request; it is not a substitute for the missing exact raw PNG artifacts.

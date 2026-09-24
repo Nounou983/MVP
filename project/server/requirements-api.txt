@@ -1,0 +1,24 @@
+# Service API (server/api.py) — comptes, projets, catalogue, fichiers,
+# file de tâches. Aucune dépendance GPU/ML : ce service tourne sur une
+# petite machine, séparée du service de modèles.
+#
+#   pip install -r requirements-api.txt
+#
+# Le service de modèles (server/main.py) utilise requirements.txt, qui
+# reste inchangé.
+
+fastapi
+uvicorn[standard]
+python-multipart
+sqlalchemy>=2.0
+httpx
+pillow
+
+# Optionnel — nécessaire uniquement si CIGOGNE_STORAGE=s3 :
+# boto3
+
+# Optionnel — nécessaire uniquement si DATABASE_URL pointe vers PostgreSQL :
+# psycopg[binary]
+
+# Tests (pas nécessaire en production) :
+# pytest

@@ -1,0 +1,39 @@
+LA CIGOGNE D'AILLEURS — PHASE 10.3
+
+FULL PROJECT ZIP — NO MANUAL FILE MERGING REQUIRED.
+
+This build adds the Phase 10.3 catalogue-assistant reliability upgrade.
+The mask detector, AI removal, RORem and LaMa pipelines were intentionally
+left unchanged in this pass.
+
+Frontend:
+  python -m http.server 5500
+  Open http://localhost:5500
+
+Model service (AI removal/analysis):
+  cd server
+  uvicorn main:app --reload --port 8000
+
+Optional application API (accounts/projects/catalogue):
+  cd server
+  uvicorn api:app --reload --port 8100
+
+Phase 10.3 assistant examples:
+  - Ajoute un canapé moderne beige
+  - Ajoute une table basse devant le canapé
+  - Ajoute deux lampes de chaque côté du canapé
+  - Ajoute un canapé et une table basse devant le canapé
+
+The assistant now verifies that the requested number of catalogue objects
+was actually created before reporting success. Multi-object natural-language
+commands are handled as one editor action for undo/history purposes.
+
+Project lifecycle safety was also strengthened: starting a new composition or
+importing a new room clears the previous project identity so autosave cannot
+accidentally overwrite the previous project.
+
+Do not manually replace server/main.py for this Phase 10.3 build.
+
+
+PHASE 9.3 AI REMOVAL QUALITY
+See PHASE_9_3_AI_REMOVAL_QUALITY.md. The current build preserves Mask Engine V4 and upgrades the furniture deletion cascade.

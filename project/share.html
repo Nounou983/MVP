@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#101115" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Projet partagé — La Cigogne D'Ailleurs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Vue client : une seule colonne, aucune commande d'édition. */
+    body.share { background: var(--paper-warm); color: var(--ink); }
+    .share-page { max-width: 1080px; margin: 0 auto; padding: 24px 20px 64px; }
+    .share-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .share-top h1 { font-size: 22px; margin: 0; }
+    .share-top small { color: var(--ink-mute); }
+    .share-badge {
+      padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      background: color-mix(in srgb, var(--brand) 26%, transparent);
+    }
+    .share-media {
+      background: var(--stage); border-radius: 16px; overflow: hidden;
+      display: grid; place-items: center; min-height: 260px; margin-bottom: 20px;
+    }
+    .share-media img { display: block; max-width: 100%; max-height: 72vh; }
+    .share-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
+    .share-items { display: grid; gap: 8px; }
+    .share-item {
+      display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center;
+      padding: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+    }
+    .share-item span.media { width: 44px; height: 34px; display: grid; place-items: center; }
+    .share-item span.media svg, .share-item span.media img { max-width: 100%; max-height: 100%; }
+    .share-item b { font-size: 13.5px; font-weight: 600; }
+    .share-item small { display: block; color: var(--ink-mute); font-size: 11.5px; }
+    .share-item i { font-style: normal; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .share-total { display: flex; justify-content: space-between; padding: 14px 10px 0; font-size: 16px; font-weight: 700; }
+    .comment { padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); margin-bottom: 8px; }
+    .comment strong { display: block; font-size: 13px; }
+    .comment small { color: var(--ink-mute); font-size: 11.5px; }
+    .comment p { margin: 6px 0 0; font-size: 13.5px; }
+    .share-state { padding: 40px 20px; text-align: center; color: var(--ink-mute); }
+    textarea {
+      width: 100%; min-height: 84px; padding: 10px; font: inherit; resize: vertical;
+      border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink);
+    }
+    @media (max-width: 860px) { .share-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="share">
+  <main class="share-page">
+    <div id="shareState" class="share-state">Ouverture du projet…</div>
+
+    <div id="shareContent" hidden>
+      <header class="share-top">
+        <div>
+          <h1 id="shareTitle">Projet</h1>
+          <small id="shareAuthor"></small>
+        </div>
+        <span class="share-badge" id="sharePermission">Lecture seule</span>
+      </header>
+
+      <div class="share-media">
+        <img id="shareImage" alt="Aperçu de la composition" hidden>
+        <p id="shareNoImage" class="share-state" hidden>Aucun aperçu n'a été enregistré pour ce projet.</p>
+      </div>
+
+      <div class="share-grid">
+        <section>
+          <h2 class="card__title">Meubles proposés</h2>
+          <div id="shareItems" class="share-items"></div>
+          <div class="share-total"><span>Total estimé</span><strong id="shareTotal">0 DA</strong></div>
+        </section>
+
+        <aside id="shareComments" hidden>
+          <h2 class="card__title">Vos retours</h2>
+          <div id="commentList"></div>
+          <form id="commentForm" class="form">
+            <label class="field">
+              <span>Votre nom</span>
+              <input id="commentName" type="text" maxlength="120" placeholder="Nom" required>
+            </label>
+            <label class="field">
+              <span>Commentaire</span>
+              <textarea id="commentBody" maxlength="4000" placeholder="Le canapé est un peu grand pour la pièce…" required></textarea>
+            </label>
+            <p id="commentError" class="form__error" role="alert" hidden></p>
+            <button class="btn btn--primary btn--block" type="submit">Envoyer</button>
+          </form>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/furniture-data.js"></script>
+  <script>
+  /* =========================================================
+     Vue client : lecture seule, sans jeton de compte.
+     Elle n'appelle que /api/shared/{token} — le lien ne donne
+     accès à rien d'autre que ce projet.
+     ========================================================= */
+  (async () => {
+    "use strict";
+    const $ = id => document.getElementById(id);
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("t") || params.get("token") || "";
+    const API = window.CigogneAPI;
+    const escapeHtml = v => String(v ?? "").replace(/[&<>"']/g, c =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    if (!token) {
+      $("shareState").textContent = "Lien incomplet : le jeton de partage est absent.";
+      return;
+    }
+
+    let payload;
+    try {
+      payload = await API.readShared(token);
+    } catch (err) {
+      $("shareState").textContent = err.offline
+        ? "Service indisponible pour le moment. Réessayez dans quelques minutes."
+        : err.message;
+      return;
+    }
+
+    const project = payload.project || {};
+    const doc = project.state || {};
+
+    $("shareState").hidden = true;
+    $("shareContent").hidden = false;
+    $("shareTitle").textContent = project.name || "Projet";
+    $("shareAuthor").textContent = payload.author?.display_name
+      ? `Proposé par ${payload.author.display_name}`
+      : "";
+    $("sharePermission").textContent = payload.can_comment ? "Commentaires ouverts" : "Lecture seule";
+
+    if (project.room_url) {
+      const image = $("shareImage");
+      image.src = project.room_url;
+      image.hidden = false;
+      image.addEventListener("error", () => {
+        image.hidden = true;
+        $("shareNoImage").hidden = false;
+      });
+    } else {
+      $("shareNoImage").hidden = false;
+    }
+
+    /* Liste des meubles : on relit le catalogue local pour la vignette,
+       et le document pour les quantités et les prix réellement retenus. */
+    const items = doc.items || [];
+    const grouped = new Map();
+    for (const item of items) {
+      const key = `${item.entryId}|${item.color}`;
+      const current = grouped.get(key) || { item, count: 0 };
+      current.count += 1;
+      grouped.set(key, current);
+    }
+
+    $("shareItems").innerHTML = grouped.size
+      ? [...grouped.values()].map(({ item, count }) => {
+          const entry = window.catalogEntry?.(item.entryId);
+          const media = entry?.make ? entry.make(item.color) : "";
+          const unit = window.formatPrice(item.price || 0);
+          return `
+            <div class="share-item">
+              <span class="media">${media}</span>
+              <span>
+                <b>${escapeHtml(item.name)}${count > 1 ? ` × ${count}` : ""}</b>
+                <small>${entry?.sku ? escapeHtml(entry.sku) + " · " : ""}${unit} l'unité</small>
+              </span>
+              <i>${window.formatPrice((item.price || 0) * count)}</i>
+            </div>`;
+        }).join("")
+      : `<p class="share-state">Aucun meuble dans cette proposition.</p>`;
+
+    $("shareTotal").textContent = window.formatPrice(
+      items.reduce((sum, item) => sum + (Number(item.price) || 0), 0)
+    );
+
+    /* Commentaires, si le lien les autorise. */
+    if (payload.can_comment) {
+      $("shareComments").hidden = false;
+      const renderComments = async () => {
+        try {
+          const data = await API.sharedComments(token);
+          $("commentList").innerHTML = (data.comments || []).length
+            ? data.comments.map(c => `
+                <div class="comment">
+                  <strong>${escapeHtml(c.author_name)}</strong>
+                  <small>${new Date(c.created_at).toLocaleString("fr-FR")}</small>
+                  <p>${escapeHtml(c.body)}</p>
+                </div>`).join("")
+            : `<p class="share-state">Aucun commentaire pour l'instant.</p>`;
+        } catch (err) {
+          $("commentList").innerHTML = `<p class="form__error">${escapeHtml(err.message)}</p>`;
+        }
+      };
+      await renderComments();
+
+      $("commentForm").addEventListener("submit", async event => {
+        event.preventDefault();
+        const error = $("commentError");
+        error.hidden = true;
+        try {
+          await API.addSharedComment(token, {
+            author_name: $("commentName").value.trim() || "Client",
+            body: $("commentBody").value.trim(),
+          });
+          $("commentBody").value = "";
+          await renderComments();
+        } catch (err) {
+          error.textContent = err.message;
+          error.hidden = false;
+        }
+      });
+    }
+  })();
+  </script>
+</body>
+</html>

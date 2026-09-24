@@ -1,0 +1,450 @@
+/* =========================================================
+   La Cigogne D'Ailleurs — Assistant IA catalogue
+   Phase 10.3 — robust natural-language composition assistant.
+
+   Offline/deterministic: parses the user's furniture intent against the
+   real catalogue, executes through AppActions, and verifies the mutation
+   before reporting success.
+   ========================================================= */
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const root = $("aiAssistant");
+  if (!root || !window.App) return;
+
+  const input = $("aiAssistantInput");
+  const messages = $("aiAssistantMessages");
+  const quick = $("aiAssistantQuick");
+
+  const COLORS = {
+    beige: ["#C0B4A4", "#9B8B7A", "#D8CDBF"], sable: ["#C0B4A4", "#D8CDBF"],
+    blanc: ["#F2EDE3", "#D8CDBF"], blanche: ["#F2EDE3"], noir: ["#2F3339", "#1F2429"],
+    anthracite: ["#2F3339"], gris: ["#9CA3AF", "#5A6270", "#7C8B9A"],
+    bleu: ["#5A6270", "#4B5563"], vert: ["#6E7F6A", "#4C744E", "#2F8A63"],
+    marron: ["#8C6A4F", "#6E4E34"], bois: ["#8C6A4F", "#6E4E34"],
+    terracotta: ["#B4614C", "#C87A34"], jaune: ["#E8B33A", "#C9A227"],
+  };
+
+  const BASE_WORDS = {
+    "table basse": "table", "table à manger": "table", "table a manger": "table",
+    "meuble tv": "tvstand", "meuble television": "tvstand", "meuble télé": "tvstand",
+    canapé: "sofa", canape: "sofa", sofa: "sofa", divan: "sofa",
+    fauteuil: "armchair", chaise: "chair", tabouret: "chair",
+    lit: "bed", tapis: "rug", moquette: "rug",
+    lampe: "lamp", lampes: "lamp", lampadaire: "lamp", lampadaires: "lamp",
+    plante: "plant", plantes: "plant",
+    table: "table",
+  };
+
+  const STOP = new Set(
+    "un une des du de la le les et en avec pour dans sur à a au aux ce cette cet ces mon ma mes ton ta tes moi plus très peu que qui est sont mets mettre ajoute ajouter ajout place placer pose poser veux vouloir donne donner montre montrer cherche chercher trouver trouve-moi moi-même autour côté cote chaque devant derrière derriere gauche droite droite gauche près pres sous avec sans".split(/\s+/)
+  );
+
+  const ACTION_RE = /\b(ajoute|ajouter|mets|mettre|place|placer|pose|poser|installe|installer|veux|donne)\b/i;
+  const SPATIAL_RE = /\b(de\s+chaque\s+c[oô]t[eé]|[aà]\s+c[oô]t[eé]|devant|derri[eè]re|[aà]\s+gauche|[aà]\s+droite|face\s+[aà]|vers|pr[eè]s\s+de|sous|au-dessus\s+de|dessus\s+de)\b/;
+
+  const norm = v => String(v || "")
+    .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9%×x\s-]/g, " ").replace(/\s+/g, " ").trim();
+  const all = () => window.CATALOG || [];
+  const selected = () => window.App.getSelected?.() || null;
+  const entryOf = id => window.catalogEntry?.(id) || all().find(e => e.id === id) || null;
+
+  function open() {
+    root.classList.add("is-open"); root.setAttribute("aria-hidden", "false");
+    if (!messages.children.length) welcome();
+    setTimeout(() => input?.focus(), 50);
+  }
+  function close() { root.classList.remove("is-open"); root.setAttribute("aria-hidden", "true"); }
+  root.querySelectorAll("[data-assistant-close]").forEach(el => el.addEventListener("click", close));
+
+  function welcome() {
+    addAssistant(`Je peux chercher dans le catalogue et agir sur votre composition. Essayez :<br><br>• « Ajoute un canapé moderne beige »<br>• « Ajoute 2 lampes de chaque côté du canapé »<br>• « Ajoute un canapé et une table basse devant le canapé »<br>• « Remplace le meuble sélectionné par un fauteuil »<br>• « Rends-le 20 % plus petit »`);
+  }
+  function addUser(text) {
+    const el = document.createElement("div"); el.className = "ai-msg ai-msg--user";
+    el.textContent = text; messages.appendChild(el); messages.scrollTop = messages.scrollHeight;
+  }
+  function addAssistant(html, actions = []) {
+    const el = document.createElement("div"); el.className = "ai-msg ai-msg--assistant"; el.innerHTML = html;
+    if (actions.length) {
+      const row = document.createElement("div"); row.className = "ai-msg__actions";
+      actions.forEach(a => { const b = document.createElement("button"); b.type = "button"; b.textContent = a.label; b.onclick = a.onClick; row.appendChild(b); });
+      el.appendChild(row);
+    }
+    messages.appendChild(el); messages.scrollTop = messages.scrollHeight; return el;
+  }
+
+  function extractCount(q) {
+    const n = norm(q);
+    const m = n.match(/\b(\d+)\b/); if (m) return Math.max(1, Math.min(6, Number(m[1])));
+    const words = { une: 1, un: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6 };
+    for (const [w, count] of Object.entries(words)) if (new RegExp(`\\b${w}\\b`).test(n)) return count;
+    return 1;
+  }
+  function extractPercent(q) { const m = String(q).match(/(\d+(?:[.,]\d+)?)\s*%/); return m ? Number(m[1].replace(",", ".")) : null; }
+  function extractBudget(q) {
+    const m = String(q).match(/(?:sous|moins de|max(?:imum)?|budget(?: de)?|jusqu.?[aà])\s*([\d\s.,]+)\s*(k|m|da|dzd)?/i);
+    if (!m) return null;
+    let n = Number(m[1].replace(/\s/g, "").replace(/,/g, "."));
+    const u = (m[2] || "").toLowerCase(); if (u === "k") n *= 1000; if (u === "m") n *= 1000000;
+    return Number.isFinite(n) ? n : null;
+  }
+  function detectColor(q) { const n = norm(q); for (const k of Object.keys(COLORS)) if (n.includes(norm(k))) return k; return null; }
+  function detectStyle(q) { const n = norm(q); for (const s of ["scandinave", "moderne", "boheme", "classique", "industriel", "naturel"]) if (n.includes(s)) return s; return null; }
+
+  function nounMatches(text) {
+    const n = norm(text);
+    return Object.keys(BASE_WORDS).sort((a, b) => b.length - a.length).map(key => {
+      const k = norm(key), idx = n.indexOf(k);
+      return idx >= 0 ? { key, base: BASE_WORDS[key], idx, end: idx + k.length } : null;
+    }).filter(Boolean).sort((a, b) => a.idx - b.idx || b.key.length - a.key.length);
+  }
+
+  function requestedBase(clause) {
+    const n = norm(clause);
+    const matches = nounMatches(n);
+    if (!matches.length) return null;
+    // Nouns occurring inside a spatial-anchor phrase are context nouns,
+    // not the object being added. Example: "lampes ... du canapé".
+    const forbidden = [];
+    const spatial = /\b(de chaque cote|a cote|devant|derriere|a gauche|a droite|face a|vers|pres de|sous|au-dessus de|dessus de)\b/g;
+    let sm;
+    while ((sm = spatial.exec(n))) {
+      forbidden.push([sm.index, Math.min(n.length, sm.index + 60)]);
+    }
+    const candidate = matches.find(m => !forbidden.some(([a, b]) => m.idx >= a && m.idx < b));
+    return candidate?.base || matches[0].base;
+  }
+
+  function requestedNoun(clause) {
+    const n = norm(clause), matches = nounMatches(n);
+    if (!matches.length) return null;
+    const base = requestedBase(n);
+    return matches.find(m => m.base === base)?.key || matches[0].key;
+  }
+
+  function splitAddClauses(q) {
+    const n = norm(q);
+    const action = n.match(/\b(ajoute|ajouter|mets|mettre|place|placer|pose|poser|installe|installer)\b/);
+    let body = action ? n.slice(action.index + action[0].length).trim() : n;
+    // Split only on conjunctions that introduce another furniture noun.
+    const parts = body.split(/\s+et\s+/g).map(s => s.trim()).filter(Boolean);
+    if (parts.length <= 1) return [body];
+    const clauses = [];
+    for (const part of parts) {
+      if (nounMatches(part).length) clauses.push(part);
+      else if (clauses.length) clauses[clauses.length - 1] += ` et ${part}`;
+    }
+    return clauses.length ? clauses : [body];
+  }
+
+  function parseAddCommand(q) {
+    const clauses = splitAddClauses(q);
+    return clauses.map((clause, i) => {
+      const base = requestedBase(clause);
+      const count = extractCount(clause);
+      const specialSides = /de chaque cote/.test(norm(clause)) && base === "lamp";
+      return {
+        clause,
+        noun: requestedNoun(clause),
+        base,
+        count: specialSides ? 2 : count,
+        style: detectStyle(clause),
+        color: detectColor(clause),
+        budget: extractBudget(clause),
+        spatial: SPATIAL_RE.test(clause),
+        index: i,
+      };
+    }).filter(x => x.base);
+  }
+
+  function detectRequestedBase(q) { return parseAddCommand(q)[0]?.base || null; }
+
+  function score(entry, q, wantedBase, wantedFamily, style, color) {
+    const n = norm(q);
+    const text = norm(`${entry.name} ${entry.blurb} ${(entry.tags || []).join(" ")} ${(entry.materials || []).join(" ")} ${(entry.styles || []).join(" ")}`);
+    let s = 0;
+    if (wantedBase && entry.base === wantedBase) s += 100;
+    if (wantedFamily && entry.family === wantedFamily) s += 20;
+    if (style && (entry.styles || []).map(norm).includes(norm(style))) s += 25;
+    if (color && (entry.variants || []).some(v => norm(v.name).includes(norm(color)))) s += 18;
+    n.split(/\s+/).filter(x => x.length > 2 && !STOP.has(x)).forEach(t => { if (text.includes(t)) s += 3; });
+    if (entry.assets?.model?.url) s += 3;
+    if (entry.assets?.photos?.length) s += 2;
+    return s;
+  }
+
+  function searchProducts(q, limit = 4, forcedBase = null) {
+    const n = norm(q);
+    const parsed = parseAddCommand(q)[0];
+    const wantedBase = forcedBase || parsed?.base || detectBaseLoose(q);
+    const wantedFamily = (entry => entry?.family)(all().find(e => e.base === wantedBase)) || null;
+    const style = detectStyle(q), color = detectColor(q), budget = extractBudget(q);
+    let arr = all().filter(e => !budget || Number(e.price || 0) <= budget);
+    arr = arr.map(e => ({ e, s: score(e, q, wantedBase, wantedFamily, style, color) }));
+    if (/moins cher|moins chers|moins chere|moins chère|prix bas|petit budget/.test(n)) arr.sort((a, b) => a.e.price - b.e.price);
+    else arr.sort((a, b) => b.s - a.s || a.e.price - b.e.price);
+    return { items: arr.slice(0, limit).map(x => x.e), wantedBase, wantedFamily, style, color, budget };
+  }
+
+  function detectBaseLoose(q) {
+    const n = norm(q), matches = nounMatches(n);
+    return matches[0]?.base || null;
+  }
+
+  function colorForEntry(entry, colorName) {
+    if (!entry || !colorName) return null;
+    const wanted = norm(colorName), v = (entry.variants || []).find(x => norm(x.name).includes(wanted));
+    return v?.hex || COLORS[colorName]?.find(hex => (entry.colors || []).includes(hex)) || null;
+  }
+
+  function anchorFor(q, preferredBase = null, extraItems = []) {
+    const n = norm(q), items = [...(window.App.state.items || []), ...extraItems];
+    const anchorPatterns = [
+      [/de chaque cote (?:de|du|des|de la) /, null],
+      [/a cote (?:de|du|des|de la) /, null],
+      [/devant (?:le|la|les|un|une) /, null],
+      [/derriere (?:le|la|les|un|une) /, null],
+      [/a gauche (?:de|du|des|de la) /, null],
+      [/a droite (?:de|du|des|de la) /, null],
+      [/face a (?:le|la|les|un|une) /, null],
+      [/vers (?:le|la|les|un|une) /, null],
+    ];
+    for (const [re] of anchorPatterns) {
+      const m = n.match(re);
+      if (!m) continue;
+      const tail = n.slice(m.index + m[0].length);
+      const base = detectBaseLoose(tail);
+      if (base) {
+        const found = items.find(i => entryOf(i.entryId)?.base === base);
+        if (found) return found;
+      }
+    }
+    if (preferredBase) {
+      const nonSelf = items.filter(i => entryOf(i.entryId)?.base === preferredBase);
+      if (nonSelf.length) return nonSelf[0];
+    }
+    return selected();
+  }
+
+  function relativeOptions(q, entry, index, count, extraItems = []) {
+    const fit = window.App.roomFit?.();
+    const anchor = anchorFor(q, null, extraItems);
+    const baseX = anchor?.x ?? (fit ? fit.x + fit.w * .5 : window.App.getCanvasSize().width * .5);
+    const baseY = anchor?.y ?? (fit ? fit.y + fit.h * .68 : window.App.getCanvasSize().height * .68);
+    const n = norm(q);
+    const anchorEntry = anchor ? entryOf(anchor.entryId) : null;
+    const anchorW = anchor ? (anchor.w || anchorEntry?.w || .8) * (anchor.scale || 1) : .8;
+    const itemW = (entry.w || .5) * 70;
+    const gap = Math.max(52, Math.min(150, anchorW * 42 + itemW * .35));
+    let x = baseX, y = baseY + Math.max(70, (anchor?.d || .8) * 34), rot = 0;
+
+    let relation = null;
+    if (/de chaque cote/.test(n) && entry.base === "lamp") {
+      relation = index === 0 ? "left" : "right";
+      x = baseX + (index === 0 ? -(gap + anchorW * 16) : (gap + anchorW * 16));
+      y = baseY;
+    } else if (/a gauche/.test(n)) {
+      relation = "left"; x = baseX - gap;
+    } else if (/a droite/.test(n)) {
+      relation = "right"; x = baseX + gap;
+    } else if (/devant|face a/.test(n)) {
+      relation = "front"; y = baseY + Math.max(80, anchorW * 18);
+    } else if (/derriere/.test(n)) {
+      relation = "back"; y = baseY - Math.max(80, anchorW * 18);
+    }
+
+    // Phase 10.4: let the existing depth/floor analysis choose the actual
+    // usable pixel location. Natural-language relations remain constraints,
+    // not replacements. If spatial analysis is unavailable, the deterministic
+    // legacy placement above remains the fallback.
+    const SI = window.SpatialIntelligence;
+    const appState = window.App?.state;
+    if (SI?.suggest && fit && appState?.analysis && window.CIGOGNE_CONFIG?.spatialIntelligence !== false) {
+      const spatialCtx = {
+        fit,
+        analysis: appState.analysis,
+        floorMaskPx: appState.floorMaskPx,
+        floorMaskW: appState.floorMaskW,
+        floorMaskH: appState.floorMaskH,
+        items: appState.items || [],
+        sizeOf: window.App.itemSize,
+      };
+      const spatial = SI.suggest(entry, spatialCtx, {
+        anchor: anchor || null,
+        relation,
+        maxDistance: anchor ? Math.max(180, Math.min(360, fit.w * 0.30)) : null,
+        rot,
+      });
+      if (spatial) {
+        x = spatial.x;
+        y = spatial.y;
+      }
+    }
+
+    // A second object without explicit spatial wording is laid out next to
+    // the previous object rather than directly on top of it. Spatial placement
+    // has already tried to avoid occupied floor regions.
+    if (!anchor && count > 1 && !relation) {
+      x = baseX + (index === 0 ? -gap : gap);
+    }
+    return { x, y, rot, _spatialIntent: true, relation };
+  }
+
+  function addProducts(entries, q, count = 1, { history = true, existing = [] } = {}) {
+    if (!entries.length) return [];
+    const expanded = [];
+    for (let i = 0; i < count; i++) expanded.push(entries[i % entries.length]);
+    const color = detectColor(q);
+    const before = new Set((window.App.state.items || []).map(i => i.uid));
+    const created = window.AppActions.addItemsBatch(
+      expanded.map(e => e.id),
+      (entry, index) => ({
+        ...relativeOptions(q, entry, index, count, [...existing, ...createdSafe()]),
+        color: colorForEntry(entry, color) || entry.color,
+      }),
+      { history }
+    );
+    const actual = (created || []).filter(item => item && !before.has(item.uid));
+    return actual;
+  }
+
+  // Avoid referencing a let-bound variable from the options callback while
+  // AppActions is constructing the batch.
+  function createdSafe() { return []; }
+
+  function addParsedRequests(requests) {
+    const allCreated = [];
+    requests.forEach((request, requestIndex) => {
+      const result = searchProducts(request.clause, 1, request.base);
+      if (!result.items[0]) return;
+      const created = addProducts(result.items, request.clause, request.count, { history: requestIndex === 0, existing: allCreated });
+      allCreated.push(...created);
+    });
+    return allCreated;
+  }
+
+  function swapSelected(entry, q) {
+    const item = selected(); if (!item) return null;
+    const color = detectColor(q);
+    return window.AppActions.updateItem(item.uid, {
+      entryId: entry.id, catId: entry.base, w: entry.w, d: entry.d,
+      price: entry.price, name: entry.name, color: colorForEntry(entry, color) || entry.color,
+    }, { status: false });
+  }
+
+  function moveSelected(q) {
+    const item = selected(); if (!item) return false;
+    const step = Number((String(q).match(/(\d+(?:[.,]\d+)?)\s*(?:px|pixels?)/i) || [])[1]) || 70;
+    const n = norm(q); let dx = 0, dy = 0;
+    if (n.includes("gauche")) dx = -step; if (n.includes("droite")) dx = step;
+    if (n.includes("haut") || n.includes("monte")) dy = -step; if (n.includes("bas") || n.includes("descend")) dy = step;
+    window.AppActions.updateItem(item.uid, { x: item.x + dx, y: item.y + dy }, { status: false }); return true;
+  }
+
+  function scaleSelected(q) {
+    const item = selected(); if (!item) return false;
+    const n = norm(q), pct = extractPercent(q);
+    const factor = pct != null ? 1 + ((n.includes("petit") || n.includes("redu") || n.includes("moins")) ? -pct : pct) / 100
+      : ((n.includes("petit") || n.includes("redu")) ? .8 : 1.2);
+    window.AppActions.updateItem(item.uid, { scale: Math.max(.2, Math.min(3, item.scale * factor)) }, { status: false }); return true;
+  }
+
+  function rotateSelected(q) {
+    const item = selected(); if (!item) return false;
+    const m = String(q).match(/(-?\d+(?:[.,]\d+)?)\s*(?:degres|°)/i);
+    const deg = m ? Number(m[1].replace(",", ".")) : (norm(q).includes("gauche") ? -15 : 15);
+    window.AppActions.updateItem(item.uid, { rot: item.rot + deg * Math.PI / 180 }, { status: false }); return true;
+  }
+
+  function resultCards(items) {
+    return items.map(e => `<div class="ai-result-card"><img src="${e.assets?.thumbnail || e.assets?.photos?.[0] || window.spriteFor(e.base, e.color)?.src || ""}" alt=""><div><strong>${e.name}</strong><small>${window.formatPrice(e.price)} · ${(e.styles || []).slice(0, 2).join(" · ")}</small></div><button data-ai-add="${e.id}">Ajouter</button></div>`).join("");
+  }
+  function bindResultButtons(container, q) {
+    container.querySelectorAll("[data-ai-add]").forEach(b => b.onclick = () => {
+      const e = entryOf(b.dataset.aiAdd); if (!e) return;
+      const before = (window.App.state.items || []).length;
+      const created = addProducts([e], q, 1);
+      if (created.length && (window.App.state.items || []).length > before) addAssistant(`✓ <b>${e.name}</b> a été ajouté à la composition.`);
+      else addAssistant(`Je n'ai pas pu ajouter <b>${e.name}</b>. Vérifiez que la pièce est bien chargée.`);
+    });
+  }
+
+  function orientToReference(q) {
+    const item = selected(); if (!item) return false;
+    const n = norm(q); let target = null;
+    if (n.includes("tv") || n.includes("tele")) target = (window.App.state.items || []).find(i => entryOf(i.entryId)?.base === "tvstand");
+    if (!target) target = anchorFor(q);
+    if (!target || target.uid === item.uid) return false;
+    const rot = Math.atan2(target.y - item.y, target.x - item.x);
+    window.AppActions.updateItem(item.uid, { rot }, { status: false }); return true;
+  }
+
+  function execute(raw) {
+    const q = String(raw || "").trim(); if (!q) return;
+    addUser(q); const n = norm(q);
+
+    if (/\b(alternative|alternatives|choix|propose|montre|cherche|trouve|recommande|recommend)\b/.test(n) && !/\b(ajoute|ajouter|mets|met|place|placer)\b/.test(n)) {
+      const r = searchProducts(q, 4);
+      const el = addAssistant(`<b>${r.items.length} suggestion${r.items.length > 1 ? "s" : ""}</b> correspondant à votre demande.${r.budget ? ` Budget ≤ ${window.formatPrice(r.budget)}.` : ""}<div>${resultCards(r.items)}</div>`);
+      bindResultButtons(el, q); return;
+    }
+
+    if (/\b(remplace|remplacer|change|changer|echange|substitue)\b/.test(n)) {
+      const item = selected();
+      if (!item) { addAssistant("Sélectionnez d'abord un meuble dans la pièce, puis dites-moi par quoi le remplacer."); return; }
+      const r = searchProducts(q, 1);
+      if (!r.items[0]) { addAssistant("Je ne trouve pas de produit correspondant dans le catalogue."); return; }
+      const before = item.entryId; const res = swapSelected(r.items[0], q);
+      if (res?.item?.entryId === r.items[0].id && res.item.entryId !== before) addAssistant(`✓ <b>${item.name}</b> → <b>${r.items[0].name}</b>.`);
+      else addAssistant("Le remplacement n'a pas pu être appliqué.");
+      return;
+    }
+
+    if (/\b(plus petit|plus grand|petit|agrand|redui|retreci|\d+\s*%)\b/.test(n) && !/\b(ajoute|ajouter)\b/.test(n) && selected()) {
+      if (scaleSelected(q)) { addAssistant(`✓ ${n.includes("petit") || n.includes("redui") || n.includes("retreci") ? "Meuble réduit" : "Meuble agrandi"}.`); return; }
+    }
+    if (/\b(deplace|deplacer|bouge|bouger|gauche|droite|haut|bas)\b/.test(n) && selected() && !/\b(ajoute|ajouter)\b/.test(n)) {
+      if (moveSelected(q)) { addAssistant("✓ Meuble déplacé avec le même moteur de placement assisté."); return; }
+    }
+    if (/\b(face a|face au|vers la tv|oriente|orienter|tourne vers)\b/.test(n) && selected()) {
+      if (orientToReference(q)) { addAssistant("✓ Meuble orienté vers la référence demandée."); return; }
+    }
+    if (/\b(tourne|tourner|rotation|pivote|pivoter)\b/.test(n) && selected()) {
+      if (rotateSelected(q)) { addAssistant("✓ Rotation appliquée."); return; }
+    }
+    if (/\b(couleur|coloris|beige|sable|blanc|noir|gris|bleu|vert|marron|bois|terracotta|jaune)\b/.test(n) && selected() && !/\b(ajoute|ajouter)\b/.test(n)) {
+      const item = selected(), e = entryOf(item.entryId), c = detectColor(q), hex = colorForEntry(e, c);
+      if (hex) { window.AppActions.updateItem(item.uid, { color: hex }, { status: false }); addAssistant(`✓ Finition <b>${c}</b> appliquée à ${item.name}.`); return; }
+    }
+
+    if (ACTION_RE.test(n)) {
+      const requests = parseAddCommand(q);
+      if (!requests.length) { addAssistant("Je ne trouve pas le meuble demandé dans le catalogue. Essayez « canapé », « fauteuil », « table basse », « lampe », « lit » ou « plante »."); return; }
+      const created = addParsedRequests(requests);
+      const expected = requests.reduce((sum, r) => sum + r.count, 0);
+      if (created.length !== expected) {
+        addAssistant(`⚠️ Je n'ai pu ajouter que <b>${created.length}</b> meuble${created.length > 1 ? "s" : ""} sur <b>${expected}</b>. Aucun faux succès n'est affiché.`);
+        return;
+      }
+      const names = [];
+      requests.forEach(r => { const e = searchProducts(r.clause, 1, r.base).items[0]; if (e) names.push(`${r.count} × ${e.name}`); });
+      addAssistant(`✓ <b>${created.length} meuble${created.length > 1 ? "s" : ""}</b> ajouté${created.length > 1 ? "s" : ""}.<br>${names.join("<br>")}<br><small>Placement spatial appliqué et création vérifiée dans la scène.</small>`);
+      return;
+    }
+
+    const r = searchProducts(q, 4);
+    const el = addAssistant(`Je peux vous proposer ces produits :<div>${resultCards(r.items)}</div>`); bindResultButtons(el, q);
+  }
+
+  quick.innerHTML = [
+    "Canapé moderne beige", "Table basse devant le canapé", "2 lampes de chaque côté", "Canapé et table basse devant le canapé", "Fauteuil scandinave", "Montre-moi les moins chers"
+  ].map(t => `<button type="button">${t}</button>`).join("");
+  quick.querySelectorAll("button").forEach(b => b.onclick = () => { input.value = b.textContent; execute(input.value); input.value = ""; });
+  $("catalogAssistantBtn")?.addEventListener("click", open);
+  $("aiAssistantSend")?.addEventListener("click", () => { const v = input.value.trim(); if (v) { execute(v); input.value = ""; } });
+  input?.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("aiAssistantSend").click(); } });
+
+  window.CigogneAssistant = { open, close, execute, search: searchProducts, parseAddCommand };
+})();

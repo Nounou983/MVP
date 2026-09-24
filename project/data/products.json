@@ -1,0 +1,1737 @@
+{
+  "schema_version": 2,
+  "currency": "DZD",
+  "families": [
+    {
+      "id": "all",
+      "label": "Tout"
+    },
+    {
+      "id": "seating",
+      "label": "Assises"
+    },
+    {
+      "id": "tables",
+      "label": "Tables"
+    },
+    {
+      "id": "bedroom",
+      "label": "Chambre"
+    },
+    {
+      "id": "decor",
+      "label": "Déco"
+    }
+  ],
+  "seller": {
+    "id": "cigogne",
+    "name": "La Cigogne D'Ailleurs",
+    "country": "DZ",
+    "contact_email": "contact@lacigognedailleurs.dz",
+    "contact_phone": "+213 25 00 00 00"
+  },
+  "products": [
+    {
+      "id": "sofa-3",
+      "sku": "CIG-SOF-220",
+      "base": "sofa",
+      "family": "seating",
+      "name": "Canapé Tipaza 3 places",
+      "blurb": "Assise profonde, accoudoirs larges.",
+      "dimensions": {
+        "width": 2.2,
+        "depth": 0.95,
+        "height": 0.82,
+        "unit": "m"
+      },
+      "w": 2.2,
+      "d": 0.95,
+      "h": 0.82,
+      "price": 89000,
+      "currency": "DZD",
+      "color": "#5A6270",
+      "colors": [
+        "#5A6270",
+        "#2F3339",
+        "#9B8B7A",
+        "#6E7F6A"
+      ],
+      "variants": [
+        {
+          "id": "sofa-3--0",
+          "name": "Bleu ardoise",
+          "hex": "#5A6270",
+          "available": true
+        },
+        {
+          "id": "sofa-3--1",
+          "name": "Anthracite",
+          "hex": "#2F3339",
+          "available": true
+        },
+        {
+          "id": "sofa-3--2",
+          "name": "Lin",
+          "hex": "#9B8B7A",
+          "available": true
+        },
+        {
+          "id": "sofa-3--3",
+          "name": "Vert olivier",
+          "hex": "#6E7F6A",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Tissu polyester recyclé",
+        "Mousse HR 30 kg/m³",
+        "Piètement hêtre massif"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 6,
+        "lead_time_days": 14,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/sofa-3",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/sofa_02.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/sofa_02.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "sofa"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/sofa_02/sofa_02_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "sofa_02",
+          "asset_name": "Sofa 02",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/sofa_02"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "wall",
+        "clearance_front": 0.75,
+        "against_wall": true,
+        "stack": false
+      },
+      "tags": [
+        "seating",
+        "sofa"
+      ]
+    },
+    {
+      "id": "sofa-2",
+      "sku": "CIG-SOF-160",
+      "base": "sofa",
+      "family": "seating",
+      "name": "Canapé Tipaza 2 places",
+      "blurb": "Le même confort pour les petits salons.",
+      "dimensions": {
+        "width": 1.6,
+        "depth": 0.9,
+        "height": 0.82,
+        "unit": "m"
+      },
+      "w": 1.6,
+      "d": 0.9,
+      "h": 0.82,
+      "price": 67500,
+      "currency": "DZD",
+      "color": "#9B8B7A",
+      "colors": [
+        "#9B8B7A",
+        "#5A6270",
+        "#2F3339",
+        "#B4614C"
+      ],
+      "variants": [
+        {
+          "id": "sofa-2--0",
+          "name": "Lin",
+          "hex": "#9B8B7A",
+          "available": true
+        },
+        {
+          "id": "sofa-2--1",
+          "name": "Bleu ardoise",
+          "hex": "#5A6270",
+          "available": true
+        },
+        {
+          "id": "sofa-2--2",
+          "name": "Anthracite",
+          "hex": "#2F3339",
+          "available": true
+        },
+        {
+          "id": "sofa-2--3",
+          "name": "Terracotta",
+          "hex": "#B4614C",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Tissu polyester recyclé",
+        "Mousse HR 30 kg/m³",
+        "Piètement hêtre massif"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 9,
+        "lead_time_days": 14,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/sofa-2",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/sofa_03.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/sofa_03.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "sofa"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/sofa_03/sofa_03_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "sofa_03",
+          "asset_name": "Sofa 03",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/sofa_03"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "wall",
+        "clearance_front": 0.75,
+        "against_wall": true,
+        "stack": false
+      },
+      "tags": [
+        "seating",
+        "sofa"
+      ]
+    },
+    {
+      "id": "armchair",
+      "sku": "CIG-ARM-095",
+      "base": "armchair",
+      "family": "seating",
+      "name": "Fauteuil Oran",
+      "blurb": "Dossier enveloppant, pieds en bois.",
+      "dimensions": {
+        "width": 0.95,
+        "depth": 0.9,
+        "height": 0.86,
+        "unit": "m"
+      },
+      "w": 0.95,
+      "d": 0.9,
+      "h": 0.86,
+      "price": 34500,
+      "currency": "DZD",
+      "color": "#3A4049",
+      "colors": [
+        "#3A4049",
+        "#8C6A4F",
+        "#6E7F6A",
+        "#C0B4A4"
+      ],
+      "variants": [
+        {
+          "id": "armchair--0",
+          "name": "Encre",
+          "hex": "#3A4049",
+          "available": true
+        },
+        {
+          "id": "armchair--1",
+          "name": "Noyer",
+          "hex": "#8C6A4F",
+          "available": true
+        },
+        {
+          "id": "armchair--2",
+          "name": "Vert olivier",
+          "hex": "#6E7F6A",
+          "available": true
+        },
+        {
+          "id": "armchair--3",
+          "name": "Sable",
+          "hex": "#C0B4A4",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Velours côtelé",
+        "Contreplaqué cintré",
+        "Chêne huilé"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 12,
+        "lead_time_days": 10,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/armchair",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/modern_arm_chair_01.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/modern_arm_chair_01.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "armchair"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/modern_arm_chair_01/modern_arm_chair_01_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "modern_arm_chair_01",
+          "asset_name": "Modern Arm Chair 01",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/modern_arm_chair_01"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.6,
+        "against_wall": false,
+        "stack": false
+      },
+      "tags": [
+        "seating",
+        "armchair"
+      ]
+    },
+    {
+      "id": "chair",
+      "sku": "CIG-CHR-045",
+      "base": "chair",
+      "family": "seating",
+      "name": "Chaise Sahel",
+      "blurb": "Coque moulée, empilable.",
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.45,
+        "height": 0.84,
+        "unit": "m"
+      },
+      "w": 0.45,
+      "d": 0.45,
+      "h": 0.84,
+      "price": 7400,
+      "currency": "DZD",
+      "color": "#2E7D64",
+      "colors": [
+        "#2E7D64",
+        "#1F2429",
+        "#C9A227",
+        "#B4614C"
+      ],
+      "variants": [
+        {
+          "id": "chair--0",
+          "name": "Vert cèdre",
+          "hex": "#2E7D64",
+          "available": true
+        },
+        {
+          "id": "chair--1",
+          "name": "Noir mat",
+          "hex": "#1F2429",
+          "available": true
+        },
+        {
+          "id": "chair--2",
+          "name": "Ambre",
+          "hex": "#C9A227",
+          "available": true
+        },
+        {
+          "id": "chair--3",
+          "name": "Terracotta",
+          "hex": "#B4614C",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Polypropylène teinté masse",
+        "Acier époxy"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 48,
+        "lead_time_days": 4,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/chair",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/dining_chair_02.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/dining_chair_02.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "chair"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/dining_chair_02/dining_chair_02_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "dining_chair_02",
+          "asset_name": "Dining Chair 02",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/dining_chair_02"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.45,
+        "against_wall": false,
+        "stack": true
+      },
+      "tags": [
+        "seating",
+        "chair"
+      ]
+    },
+    {
+      "id": "stool",
+      "sku": "CIG-STL-038",
+      "base": "chair",
+      "family": "seating",
+      "name": "Tabouret Blida",
+      "blurb": "Appoint léger, se range sous la table.",
+      "dimensions": {
+        "width": 0.38,
+        "depth": 0.38,
+        "height": 0.65,
+        "unit": "m"
+      },
+      "w": 0.38,
+      "d": 0.38,
+      "h": 0.65,
+      "price": 4900,
+      "currency": "DZD",
+      "color": "#C9A227",
+      "colors": [
+        "#C9A227",
+        "#2E7D64",
+        "#1F2429",
+        "#9B8B7A"
+      ],
+      "variants": [
+        {
+          "id": "stool--0",
+          "name": "Ambre",
+          "hex": "#C9A227",
+          "available": true
+        },
+        {
+          "id": "stool--1",
+          "name": "Vert cèdre",
+          "hex": "#2E7D64",
+          "available": true
+        },
+        {
+          "id": "stool--2",
+          "name": "Noir mat",
+          "hex": "#1F2429",
+          "available": true
+        },
+        {
+          "id": "stool--3",
+          "name": "Lin",
+          "hex": "#9B8B7A",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Frêne massif",
+        "Vernis mat"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 60,
+        "lead_time_days": 4,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/stool",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/wooden_stool_02.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/wooden_stool_02.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "chair"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/wooden_stool_02/wooden_stool_02_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "wooden_stool_02",
+          "asset_name": "Wooden Stool 02",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/wooden_stool_02"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.45,
+        "against_wall": false,
+        "stack": true
+      },
+      "tags": [
+        "seating",
+        "chair"
+      ]
+    },
+    {
+      "id": "coffee",
+      "sku": "CIG-TBL-110",
+      "base": "table",
+      "family": "tables",
+      "name": "Table basse Annaba",
+      "blurb": "Plateau chêne, structure fine.",
+      "dimensions": {
+        "width": 1.1,
+        "depth": 0.6,
+        "height": 0.4,
+        "unit": "m"
+      },
+      "w": 1.1,
+      "d": 0.6,
+      "h": 0.4,
+      "price": 18900,
+      "currency": "DZD",
+      "color": "#8C6A4F",
+      "colors": [
+        "#8C6A4F",
+        "#3A3F45",
+        "#D8CDBF",
+        "#6B4DF6"
+      ],
+      "variants": [
+        {
+          "id": "coffee--0",
+          "name": "Noyer",
+          "hex": "#8C6A4F",
+          "available": true
+        },
+        {
+          "id": "coffee--1",
+          "name": "Graphite",
+          "hex": "#3A3F45",
+          "available": true
+        },
+        {
+          "id": "coffee--2",
+          "name": "Craie",
+          "hex": "#D8CDBF",
+          "available": true
+        },
+        {
+          "id": "coffee--3",
+          "name": "Indigo",
+          "hex": "#6B4DF6",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Placage chêne",
+        "Acier laqué"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 15,
+        "lead_time_days": 7,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/coffee",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/modern_coffee_table_01.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/modern_coffee_table_01.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "table"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/modern_coffee_table_01/modern_coffee_table_01_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "modern_coffee_table_01",
+          "asset_name": "Modern Coffee Table 01",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/modern_coffee_table_01"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.7,
+        "against_wall": false,
+        "stack": false
+      },
+      "tags": [
+        "tables",
+        "table"
+      ]
+    },
+    {
+      "id": "dining",
+      "sku": "CIG-TBL-160",
+      "base": "table",
+      "family": "tables",
+      "name": "Table à manger Béjaïa",
+      "blurb": "Six couverts, plateau massif.",
+      "dimensions": {
+        "width": 1.6,
+        "depth": 0.9,
+        "height": 0.75,
+        "unit": "m"
+      },
+      "w": 1.6,
+      "d": 0.9,
+      "h": 0.75,
+      "price": 54000,
+      "currency": "DZD",
+      "color": "#6E4E34",
+      "colors": [
+        "#6E4E34",
+        "#3A3F45",
+        "#D8CDBF",
+        "#8C6A4F"
+      ],
+      "variants": [
+        {
+          "id": "dining--0",
+          "name": "Chêne foncé",
+          "hex": "#6E4E34",
+          "available": true
+        },
+        {
+          "id": "dining--1",
+          "name": "Graphite",
+          "hex": "#3A3F45",
+          "available": true
+        },
+        {
+          "id": "dining--2",
+          "name": "Craie",
+          "hex": "#D8CDBF",
+          "available": true
+        },
+        {
+          "id": "dining--3",
+          "name": "Noyer",
+          "hex": "#8C6A4F",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Chêne massif huilé",
+        "Acier noir"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 4,
+        "lead_time_days": 21,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/dining",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/dining_table.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/dining_table.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "table"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/dining_table/dining_table_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "dining_table",
+          "asset_name": "Dining Table",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/dining_table"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.7,
+        "against_wall": false,
+        "stack": false
+      },
+      "tags": [
+        "tables",
+        "table"
+      ]
+    },
+    {
+      "id": "tvstand",
+      "sku": "CIG-TVS-180",
+      "base": "tvstand",
+      "family": "tables",
+      "name": "Meuble TV Tlemcen",
+      "blurb": "Deux portes, passe-câbles.",
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.4,
+        "height": 0.45,
+        "unit": "m"
+      },
+      "w": 1.8,
+      "d": 0.4,
+      "h": 0.45,
+      "price": 31500,
+      "currency": "DZD",
+      "color": "#4B5563",
+      "colors": [
+        "#4B5563",
+        "#8C6A4F",
+        "#D8CDBF",
+        "#1F2429"
+      ],
+      "variants": [
+        {
+          "id": "tvstand--0",
+          "name": "Gris acier",
+          "hex": "#4B5563",
+          "available": true
+        },
+        {
+          "id": "tvstand--1",
+          "name": "Noyer",
+          "hex": "#8C6A4F",
+          "available": true
+        },
+        {
+          "id": "tvstand--2",
+          "name": "Craie",
+          "hex": "#D8CDBF",
+          "available": true
+        },
+        {
+          "id": "tvstand--3",
+          "name": "Noir mat",
+          "hex": "#1F2429",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Panneau mélaminé",
+        "Charnières à frein"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 8,
+        "lead_time_days": 10,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/tvstand",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/modern_wooden_cabinet.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/modern_wooden_cabinet.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "tvstand"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/modern_wooden_cabinet/modern_wooden_cabinet_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "modern_wooden_cabinet",
+          "asset_name": "Modern Wooden Cabinet",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/modern_wooden_cabinet"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "wall",
+        "clearance_front": 0.9,
+        "against_wall": true,
+        "stack": false
+      },
+      "tags": [
+        "tables",
+        "tvstand"
+      ]
+    },
+    {
+      "id": "bed-160",
+      "sku": "CIG-BED-160",
+      "base": "bed",
+      "family": "bedroom",
+      "name": "Lit Ghardaïa 160×200",
+      "blurb": "Tête de lit capitonnée.",
+      "dimensions": {
+        "width": 1.6,
+        "depth": 2.0,
+        "height": 1.05,
+        "unit": "m"
+      },
+      "w": 1.6,
+      "d": 2.0,
+      "h": 1.05,
+      "price": 74000,
+      "currency": "DZD",
+      "color": "#9CA3AF",
+      "colors": [
+        "#9CA3AF",
+        "#8C6A4F",
+        "#2F3339",
+        "#C0B4A4"
+      ],
+      "variants": [
+        {
+          "id": "bed-160--0",
+          "name": "Gris perle",
+          "hex": "#9CA3AF",
+          "available": true
+        },
+        {
+          "id": "bed-160--1",
+          "name": "Noyer",
+          "hex": "#8C6A4F",
+          "available": true
+        },
+        {
+          "id": "bed-160--2",
+          "name": "Anthracite",
+          "hex": "#2F3339",
+          "available": true
+        },
+        {
+          "id": "bed-160--3",
+          "name": "Sable",
+          "hex": "#C0B4A4",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Tissu chiné",
+        "Sommier à lattes",
+        "Pin massif"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 5,
+        "lead_time_days": 18,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/bed-160",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/GothicBed_01.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/GothicBed_01.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "bed"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/GothicBed_01/GothicBed_01_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "GothicBed_01",
+          "asset_name": "Gothic Bed 01",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/GothicBed_01"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "wall",
+        "clearance_front": 0.6,
+        "against_wall": true,
+        "stack": false
+      },
+      "tags": [
+        "bedroom",
+        "bed"
+      ]
+    },
+    {
+      "id": "bed-90",
+      "sku": "CIG-BED-090",
+      "base": "bed",
+      "family": "bedroom",
+      "name": "Lit Ghardaïa 90×190",
+      "blurb": "Format simple, sommier inclus.",
+      "dimensions": {
+        "width": 0.9,
+        "depth": 1.9,
+        "height": 1.0,
+        "unit": "m"
+      },
+      "w": 0.9,
+      "d": 1.9,
+      "h": 1.0,
+      "price": 42000,
+      "currency": "DZD",
+      "color": "#C0B4A4",
+      "colors": [
+        "#C0B4A4",
+        "#9CA3AF",
+        "#6E7F6A",
+        "#2F3339"
+      ],
+      "variants": [
+        {
+          "id": "bed-90--0",
+          "name": "Sable",
+          "hex": "#C0B4A4",
+          "available": true
+        },
+        {
+          "id": "bed-90--1",
+          "name": "Gris perle",
+          "hex": "#9CA3AF",
+          "available": true
+        },
+        {
+          "id": "bed-90--2",
+          "name": "Vert olivier",
+          "hex": "#6E7F6A",
+          "available": true
+        },
+        {
+          "id": "bed-90--3",
+          "name": "Anthracite",
+          "hex": "#2F3339",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Tissu chiné",
+        "Sommier à lattes",
+        "Pin massif"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 7,
+        "lead_time_days": 18,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/bed-90",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/GothicBed_01.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/GothicBed_01.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "bed"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/GothicBed_01/GothicBed_01_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "GothicBed_01",
+          "asset_name": "Gothic Bed 01",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/GothicBed_01"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "wall",
+        "clearance_front": 0.6,
+        "against_wall": true,
+        "stack": false
+      },
+      "tags": [
+        "bedroom",
+        "bed"
+      ]
+    },
+    {
+      "id": "rug-160",
+      "sku": "CIG-RUG-160",
+      "base": "rug",
+      "family": "decor",
+      "name": "Tapis Ghardaïa 160×110",
+      "blurb": "Laine tissée main.",
+      "dimensions": {
+        "width": 1.6,
+        "depth": 1.1,
+        "height": 0.02,
+        "unit": "m"
+      },
+      "w": 1.6,
+      "d": 1.1,
+      "h": 0.02,
+      "price": 22000,
+      "currency": "DZD",
+      "color": "#C87A34",
+      "colors": [
+        "#C87A34",
+        "#7C8B9A",
+        "#8E9B6C",
+        "#B5ADA0"
+      ],
+      "variants": [
+        {
+          "id": "rug-160--0",
+          "name": "Safran",
+          "hex": "#C87A34",
+          "available": true
+        },
+        {
+          "id": "rug-160--1",
+          "name": "Bleu brume",
+          "hex": "#7C8B9A",
+          "available": true
+        },
+        {
+          "id": "rug-160--2",
+          "name": "Olive claire",
+          "hex": "#8E9B6C",
+          "available": true
+        },
+        {
+          "id": "rug-160--3",
+          "name": "Grège",
+          "hex": "#B5ADA0",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Laine 100 %",
+        "Trame coton"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 11,
+        "lead_time_days": 6,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/rug-160",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": null,
+        "photos": [],
+        "sprite": {
+          "kind": "vector",
+          "maker": "rug"
+        },
+        "model": {
+          "url": null,
+          "format": "glb",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "is_placeholder": true,
+        "placeholder_reason": "Aucun visuel sous licence fourni : repli sur le sprite vectoriel.",
+        "source": {
+          "provider": "La Cigogne D'Ailleurs",
+          "license": "Demo placeholder",
+          "license_url": "",
+          "source_url": ""
+        }
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.0,
+        "against_wall": false,
+        "stack": false,
+        "under_furniture": true
+      },
+      "tags": [
+        "decor",
+        "rug"
+      ]
+    },
+    {
+      "id": "rug-240",
+      "sku": "CIG-RUG-240",
+      "base": "rug",
+      "family": "decor",
+      "name": "Grand tapis 240×170",
+      "blurb": "Assez large pour un salon entier.",
+      "dimensions": {
+        "width": 2.4,
+        "depth": 1.7,
+        "height": 0.02,
+        "unit": "m"
+      },
+      "w": 2.4,
+      "d": 1.7,
+      "h": 0.02,
+      "price": 39000,
+      "currency": "DZD",
+      "color": "#7C8B9A",
+      "colors": [
+        "#7C8B9A",
+        "#C87A34",
+        "#8E9B6C",
+        "#B5ADA0"
+      ],
+      "variants": [
+        {
+          "id": "rug-240--0",
+          "name": "Bleu brume",
+          "hex": "#7C8B9A",
+          "available": true
+        },
+        {
+          "id": "rug-240--1",
+          "name": "Safran",
+          "hex": "#C87A34",
+          "available": true
+        },
+        {
+          "id": "rug-240--2",
+          "name": "Olive claire",
+          "hex": "#8E9B6C",
+          "available": true
+        },
+        {
+          "id": "rug-240--3",
+          "name": "Grège",
+          "hex": "#B5ADA0",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Laine 100 %",
+        "Trame coton"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 6,
+        "lead_time_days": 6,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/rug-240",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": null,
+        "photos": [],
+        "sprite": {
+          "kind": "vector",
+          "maker": "rug"
+        },
+        "model": {
+          "url": null,
+          "format": "glb",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "is_placeholder": true,
+        "placeholder_reason": "Aucun visuel sous licence fourni : repli sur le sprite vectoriel.",
+        "source": {
+          "provider": "La Cigogne D'Ailleurs",
+          "license": "Demo placeholder",
+          "license_url": "",
+          "source_url": ""
+        }
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.0,
+        "against_wall": false,
+        "stack": false,
+        "under_furniture": true
+      },
+      "tags": [
+        "decor",
+        "rug"
+      ]
+    },
+    {
+      "id": "lamp",
+      "sku": "CIG-LMP-155",
+      "base": "lamp",
+      "family": "decor",
+      "name": "Lampadaire Sétif",
+      "blurb": "Abat-jour tissu, variateur.",
+      "dimensions": {
+        "width": 0.35,
+        "depth": 0.35,
+        "height": 1.55,
+        "unit": "m"
+      },
+      "w": 0.35,
+      "d": 0.35,
+      "h": 1.55,
+      "price": 9900,
+      "currency": "DZD",
+      "color": "#E8B33A",
+      "colors": [
+        "#E8B33A",
+        "#F2EDE3",
+        "#2F3339",
+        "#6E7F6A"
+      ],
+      "variants": [
+        {
+          "id": "lamp--0",
+          "name": "Or doux",
+          "hex": "#E8B33A",
+          "available": true
+        },
+        {
+          "id": "lamp--1",
+          "name": "Ivoire",
+          "hex": "#F2EDE3",
+          "available": true
+        },
+        {
+          "id": "lamp--2",
+          "name": "Anthracite",
+          "hex": "#2F3339",
+          "available": true
+        },
+        {
+          "id": "lamp--3",
+          "name": "Vert olivier",
+          "hex": "#6E7F6A",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Lin",
+        "Laiton brossé"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 22,
+        "lead_time_days": 5,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/lamp",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/industrial_pipe_lamp.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/industrial_pipe_lamp.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "lamp"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/industrial_pipe_lamp/industrial_pipe_lamp_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "industrial_pipe_lamp",
+          "asset_name": "Industrial Pipe Lamp",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/industrial_pipe_lamp"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.2,
+        "against_wall": false,
+        "stack": false
+      },
+      "tags": [
+        "decor",
+        "lamp"
+      ]
+    },
+    {
+      "id": "plant",
+      "sku": "CIG-PLT-080",
+      "base": "plant",
+      "family": "decor",
+      "name": "Plante d'intérieur",
+      "blurb": "Pot en terre cuite inclus.",
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.45,
+        "height": 0.8,
+        "unit": "m"
+      },
+      "w": 0.45,
+      "d": 0.45,
+      "h": 0.8,
+      "price": 4200,
+      "currency": "DZD",
+      "color": "#2F8A63",
+      "colors": [
+        "#2F8A63",
+        "#4C744E",
+        "#7FA06B"
+      ],
+      "variants": [
+        {
+          "id": "plant--0",
+          "name": "Vert feuille",
+          "hex": "#2F8A63",
+          "available": true
+        },
+        {
+          "id": "plant--1",
+          "name": "Vert forêt",
+          "hex": "#4C744E",
+          "available": true
+        },
+        {
+          "id": "plant--2",
+          "name": "Vert tendre",
+          "hex": "#7FA06B",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Terre cuite",
+        "Feuillage artificiel"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 40,
+        "lead_time_days": 3,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/plant",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/potted_plant_04.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/potted_plant_04.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "plant"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/potted_plant_04/potted_plant_04_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "potted_plant_04",
+          "asset_name": "Potted Plant 04",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/potted_plant_04"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.2,
+        "against_wall": false,
+        "stack": false
+      },
+      "tags": [
+        "decor",
+        "plant"
+      ]
+    },
+    {
+      "id": "plant-xl",
+      "sku": "CIG-PLT-145",
+      "base": "plant",
+      "family": "decor",
+      "name": "Grande plante",
+      "blurb": "Pour habiller un angle vide.",
+      "dimensions": {
+        "width": 0.7,
+        "depth": 0.7,
+        "height": 1.45,
+        "unit": "m"
+      },
+      "w": 0.7,
+      "d": 0.7,
+      "h": 1.45,
+      "price": 8600,
+      "currency": "DZD",
+      "color": "#4C744E",
+      "colors": [
+        "#4C744E",
+        "#2F8A63",
+        "#7FA06B"
+      ],
+      "variants": [
+        {
+          "id": "plant-xl--0",
+          "name": "Vert forêt",
+          "hex": "#4C744E",
+          "available": true
+        },
+        {
+          "id": "plant-xl--1",
+          "name": "Vert feuille",
+          "hex": "#2F8A63",
+          "available": true
+        },
+        {
+          "id": "plant-xl--2",
+          "name": "Vert tendre",
+          "hex": "#7FA06B",
+          "available": true
+        }
+      ],
+      "materials": [
+        "Terre cuite",
+        "Feuillage artificiel"
+      ],
+      "care": "Dépoussiérer régulièrement, éviter l'exposition directe au soleil.",
+      "seller": {
+        "id": "cigogne",
+        "name": "La Cigogne D'Ailleurs",
+        "country": "DZ",
+        "contact_email": "contact@lacigognedailleurs.dz",
+        "contact_phone": "+213 25 00 00 00"
+      },
+      "manufacturer": "Atelier Cigogne",
+      "availability": {
+        "status": "in_stock",
+        "stock": 18,
+        "lead_time_days": 3,
+        "regions": [
+          "DZ"
+        ]
+      },
+      "product_url": "https://lacigognedailleurs.dz/produits/plant-xl",
+      "cta": {
+        "type": "contact",
+        "label": "Demander un devis"
+      },
+      "assets": {
+        "thumbnail": "https://cdn.polyhaven.com/asset_img/thumbs/potted_plant_01.png?width=640&height=640",
+        "photos": [
+          "https://cdn.polyhaven.com/asset_img/primary/potted_plant_01.png?width=1200&height=1200"
+        ],
+        "sprite": {
+          "kind": "vector",
+          "maker": "plant"
+        },
+        "model": {
+          "url": "https://dl.polyhaven.com/file/ph-assets/Models/gltf/2k/potted_plant_01/potted_plant_01_2k.gltf",
+          "format": "gltf",
+          "up_axis": "Y",
+          "scale": 1.0
+        },
+        "source": {
+          "provider": "Poly Haven",
+          "asset_id": "potted_plant_01",
+          "asset_name": "Potted Plant 01",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://polyhaven.com/a/potted_plant_01"
+        },
+        "is_placeholder": false,
+        "placeholder_reason": null
+      },
+      "placement": {
+        "anchor": "floor",
+        "clearance_front": 0.2,
+        "against_wall": false,
+        "stack": false
+      },
+      "tags": [
+        "decor",
+        "plant"
+      ]
+    }
+  ],
+  "asset_library": {
+    "provider": "Poly Haven",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "policy": "CC0 demo assets are used for the technical product library. Replace with licensed retail assets before commercial product catalog launch.",
+    "powered_by_note": "CC0 assets are self-hosted/linked as data; no live Poly Haven API is required for the bundled catalog."
+  }
+}
