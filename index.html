@@ -8,8 +8,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=20260926-mobile-v2" />
   <script src="deployment-config.js"></script>
+  <script>
+    /* Mobile runtime detection: Android/iOS "Desktop site" can expose a wide CSS viewport.
+       Detect the physical/touch device too, then let CSS switch layouts via this class. */
+    (function(){
+      function isPhoneLike(){
+        var ua = navigator.userAgent || "";
+        var mobileUA = /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(ua);
+        var touch = (navigator.maxTouchPoints || 0) > 0 || ('ontouchstart' in window);
+        var sw = Number((window.screen && window.screen.width) || window.innerWidth || 0);
+        var sh = Number((window.screen && window.screen.height) || window.innerHeight || 0);
+        var shortEdge = Math.min(sw || 99999, sh || 99999);
+        return mobileUA || (touch && shortEdge <= 1200);
+      }
+      function syncMobileClass(){
+        var mobile = isPhoneLike();
+        document.documentElement.classList.toggle('is-mobile-ui', mobile);
+        document.documentElement.dataset.uiMode = mobile ? 'mobile' : 'desktop';
+      }
+      syncMobileClass();
+      window.addEventListener('resize', syncMobileClass, {passive:true});
+      window.addEventListener('orientationchange', function(){ setTimeout(syncMobileClass, 50); }, {passive:true});
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', syncMobileClass, {passive:true});
+    })();
+  </script>
   <script type="importmap">
   {
     "imports": {
@@ -483,6 +507,7 @@
   <!-- Moteur, interface, puis les modules qui s'y accrochent. -->
   <script src="js/app.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/ui-explanations.js?v=20260926-guidance-v2"></script>
   <script src="js/ai-assistant.js"></script>
   <script src="js/room-sync.js"></script>
   <script src="js/projects.js"></script>
@@ -504,7 +529,6 @@
       }
     })();
   </script>
-  <script src="js/ui-explanations.js"></script>
   <script src="js/phase3e.js"></script>
 </body>
 </html>

@@ -1,437 +1,128 @@
-/* =========================================================
-   La Cigogne D'Ailleurs — UX guidance + mobile runtime bridge
-   - Forces a real mobile UI on touch devices even when a browser
-     exposes a desktop-like CSS viewport.
-   - Adds compact French + Algerian Darija explanations.
-   - Does not touch backend, AI, placement or 3D logic.
-   ========================================================= */
-(() => {
-  "use strict";
+/* La Cigogne D'Ailleurs — UI explanations + first-use guide
+   French + Algerian Darija. No dependency on the application internals. */
+(function(){
+  'use strict';
+  var KEY='cigogne_ui_guide_v2_seen';
+  var root=document.documentElement;
+  var guideSteps=[
+    {target:'[data-panel="catalog"]',title:'Meubles',fr:'Choisissez un meuble dans le catalogue et ajoutez-le dans votre pièce.',dz:'اختار الموبليا من الكاتالوغ وزيدها للبياسة تاعك.'},
+    {target:'[data-panel="room"]',title:'Pièce',fr:'Importez votre photo et laissez l’IA analyser le sol, la profondeur et l’espace.',dz:'دخل تصويرة تاع البياسة وخلي الـIA تحلل السول، العمق والمساحة.'},
+    {target:'[data-panel="ai"]',title:'Retouche IA',fr:'Sélectionnez un ancien meuble : l’IA crée un masque et reconstruit la zone.',dz:'حدد الموبليا القديمة، والـIA تدير الماسك وتمحيها وتعاود تبني البلاصة.'},
+    {target:'#catalogAssistantBtn',title:'Assistant IA',fr:'Décrivez ce que vous voulez : ajouter, retirer, remplacer ou déplacer un meuble.',dz:'قول للـAI واش حاب: زيد، نحي، بدل ولا حرك موبليا وبالمكان والحجم المناسب.'},
+    {target:'#viewThree',title:'Vue 3D',fr:'Passez en 3D pour visualiser les volumes et déplacer les meubles dans la scène.',dz:'روح للـ3D باش تشوف الحجم والموضع وتقدر تحرك الموبليا في المشهد.'}
+  ];
 
-  const root = document.documentElement;
-  const body = document.body;
-  const $ = (sel, scope = document) => scope.querySelector(sel);
-  const $$ = (sel, scope = document) => [...scope.querySelectorAll(sel)];
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn); else fn(); }
+  function esc(s){return String(s).replace(/[&<>\"]/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&#92;','"':'&quot;'})[c]||c;});}
 
-  /* ---------------------------------------------------------------
-     Mobile runtime detection
-     Some Android browsers / "Desktop site" modes expose a wide CSS
-     viewport even though the device is touch-first. The CSS class lets
-     the responsive layout activate in that case too.
-     --------------------------------------------------------------- */
-  function isTouchDevice() {
-    return navigator.maxTouchPoints > 0 || "ontouchstart" in window;
-  }
-
-  function syncMobileMode() {
-    const cssNarrow = window.matchMedia?.("(max-width: 1100px)")?.matches;
-    const mobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
-    const compactTouch = isTouchDevice() && Math.min(screen.width || 9999, screen.height || 9999) <= 1100;
-    const mobile = Boolean(cssNarrow || mobileUA || compactTouch);
-    root.classList.toggle("is-mobile-ui", mobile);
-    root.dataset.viewportWidth = String(Math.round(window.visualViewport?.width || window.innerWidth || 0));
-  }
-
-  function syncViewportHeight() {
-    const vv = window.visualViewport;
-    const h = vv?.height || window.innerHeight || document.documentElement.clientHeight;
-    root.style.setProperty("--app-vh", `${Math.round(h)}px`);
-  }
-
-  syncMobileMode();
-  syncViewportHeight();
-  window.addEventListener("resize", () => { syncMobileMode(); syncViewportHeight(); }, { passive: true });
-  window.addEventListener("orientationchange", () => setTimeout(() => {
-    syncMobileMode(); syncViewportHeight(); window.App?.resize?.();
-  }, 80), { passive: true });
-  window.visualViewport?.addEventListener("resize", () => {
-    syncViewportHeight();
-    window.App?.resize?.();
-  }, { passive: true });
-  window.visualViewport?.addEventListener("scroll", syncViewportHeight, { passive: true });
-  window.addEventListener("pageshow", () => { syncMobileMode(); syncViewportHeight(); window.App?.resize?.(); });
-
-  /* ---------------------------------------------------------------
-     Reusable bilingual explainer component
-     --------------------------------------------------------------- */
-  const helpIcon = `<span class="ui-explainer__icon" aria-hidden="true">i</span>`;
-
-  function makeExplainer({ title, fr, dz, tone = "info", example = "" }) {
-    const el = document.createElement("div");
-    el.className = `ui-explainer ui-explainer--${tone}`;
-    el.setAttribute("role", "note");
-    el.innerHTML = `
-      <div class="ui-explainer__top">
-        ${helpIcon}
-        <strong>${title}</strong>
-      </div>
-      <div class="ui-explainer__fr">${fr}</div>
-      <div class="ui-explainer__dz" dir="rtl">${dz}</div>
-      ${example ? `<div class="ui-explainer__example">${example}</div>` : ""}
+  function injectStyles(){
+    if(document.getElementById('ui-guide-styles')) return;
+    var st=document.createElement('style'); st.id='ui-guide-styles';
+    st.textContent=`
+      .ui-guide-overlay{position:fixed;inset:0;z-index:10000;background:rgba(15,16,20,.60);backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px}
+      .ui-guide-card{width:min(92vw,460px);background:#fff;border:1px solid #E7E4DE;border-radius:22px;box-shadow:0 28px 80px rgba(0,0,0,.35);padding:24px;color:#14151A}
+      .ui-guide-kicker{display:inline-flex;padding:5px 9px;border-radius:999px;background:#F1EDFF;color:#5636E0;font-size:11px;font-weight:700;letter-spacing:.02em}
+      .ui-guide-card h2{font-size:22px;margin:12px 0 7px}.ui-guide-card p{color:#4A4E58;font-size:13px;line-height:1.55;margin:0 0 10px}
+      .ui-guide-dz{padding:10px 12px;background:#FFF7D9;border-left:4px solid #FFC42E;border-radius:10px;font-size:13px;line-height:1.5;margin:10px 0 18px}
+      .ui-guide-actions{display:flex;gap:8px;justify-content:space-between;align-items:center}.ui-guide-actions button{min-height:42px;border-radius:10px;padding:0 14px;border:1px solid #E7E4DE;background:#FAF8F5;color:#14151A;font-weight:600}.ui-guide-actions .primary{background:#6B4DF6;border-color:#6B4DF6;color:#fff}.ui-guide-progress{display:flex;gap:5px;margin:0 0 15px}.ui-guide-dot{width:7px;height:7px;border-radius:50%;background:#D9D5CD}.ui-guide-dot.on{background:#6B4DF6;width:20px}
+      .ui-guide-popover{position:fixed;z-index:9998;width:min(330px,calc(100vw - 24px));background:#fff;border:1px solid #E7E4DE;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.24);padding:13px;color:#14151A;display:none}
+      .ui-guide-popover strong{display:block;font-size:13px;margin-bottom:4px}.ui-guide-popover p{margin:0;color:#5C5D66;font-size:11.5px;line-height:1.45}.ui-guide-popover .dz{margin-top:7px;color:#5636E0;font-weight:600}
+      .ui-guide-highlight{position:relative!important;z-index:10001!important;box-shadow:0 0 0 4px rgba(107,77,246,.45),0 0 35px rgba(107,77,246,.45)!important;border-radius:12px!important}
+      .ui-help-dot{position:absolute;right:4px;top:4px;width:18px;height:18px;border-radius:50%;background:#6B4DF6;color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;z-index:4;pointer-events:none}
     `;
-    return el;
+    document.head.appendChild(st);
   }
 
-  function insertAfter(target, data, key) {
-    if (!target || target.parentElement?.querySelector(`:scope > [data-ui-help="${key}"]`)) return;
-    const el = makeExplainer(data);
-    el.dataset.uiHelp = key;
-    target.insertAdjacentElement("afterend", el);
-    return el;
-  }
-
-  /* ---------------------------------------------------------------
-     Navigation help: hover/focus on desktop, tap on mobile.
-     --------------------------------------------------------------- */
-  const navHelp = {
-    catalog: { title: "Meubles", fr: "Choisissez et placez vos meubles dans la pièce.", dz: "اختار وحطّ الموبليات تاعك فالغرفة.", tone: "ai" },
-    room: { title: "Pièce", fr: "Importez la photo et analysez l'espace.", dz: "دخل تصويرة الغرفة وخلي الـIA تحلل المساحة تاعها.", tone: "info" },
-    ai: { title: "Retouche", fr: "Supprimez les meubles existants avec la gomme IA.", dz: "هنا تقدر تنحي الموبليات لي كاينين باستعمال الـIA.", tone: "ai" },
-    summary: { title: "Liste", fr: "Retrouvez les meubles ajoutés et leur prix.", dz: "هنا تلقى الموبليات لي زدتهم وتشوف السومة تاعهم.", tone: "success" },
-    projects: { title: "Projets", fr: "Enregistrez et retrouvez vos compositions.", dz: "هنا تحفظ المشاريع تاعك وترجعلهم من بعد.", tone: "info" },
-    account: { title: "Compte", fr: "Gérez votre compte et vos informations.", dz: "من هنا تسير الحساب والمعلومات تاعك.", tone: "info" },
-    help: { title: "Aide", fr: "Retrouvez les explications et les conseils.", dz: "ما فهمتش حاجة؟ هنا تلقى الشرح والمساعدة.", tone: "orange" },
-  };
-
-  let navPopover = null;
-  let navPopoverTimer = 0;
-
-  function hideNavHelp() {
-    clearTimeout(navPopoverTimer);
-    navPopover?.remove();
-    navPopover = null;
-  }
-
-  function showNavHelp(btn) {
-    const data = navHelp[btn?.dataset.panel];
-    if (!data) return;
-    hideNavHelp();
-    navPopover = makeExplainer(data);
-    navPopover.classList.add("ui-explainer--nav");
-    document.body.appendChild(navPopover);
-    const r = btn.getBoundingClientRect();
-    const mobile = root.classList.contains("is-mobile-ui");
-    const width = Math.min(310, window.innerWidth - 20);
-    navPopover.style.width = `${width}px`;
-    if (mobile) {
-      navPopover.style.left = `${Math.max(10, Math.min(window.innerWidth - width - 10, r.left + r.width / 2 - width / 2))}px`;
-      navPopover.style.bottom = `${Math.max(74, window.innerHeight - r.top + 10)}px`;
-    } else {
-      navPopover.style.left = `${Math.min(window.innerWidth - width - 14, r.right + 12)}px`;
-      navPopover.style.top = `${Math.max(10, Math.min(window.innerHeight - 160, r.top))}px`;
-    }
-    navPopover.addEventListener("click", e => e.stopPropagation());
-    navPopoverTimer = window.setTimeout(hideNavHelp, mobile ? 4200 : 3600);
-  }
-
-  function wireNavigation() {
-    $$(".rail__btn[data-panel]").forEach(btn => {
-      if (btn.dataset.uiHelpWired) return;
-      btn.dataset.uiHelpWired = "1";
-      btn.addEventListener("mouseenter", () => {
-        if (!root.classList.contains("is-mobile-ui")) showNavHelp(btn);
-      });
-      btn.addEventListener("focus", () => showNavHelp(btn));
-      btn.addEventListener("touchstart", () => showNavHelp(btn), { passive: true });
-      btn.setAttribute("title", navHelp[btn.dataset.panel]?.fr || "");
+  function addPersistentHints(){
+    var items=[
+      ['[data-panel="catalog"]','Meubles','اختار وزيد الموبليا'],
+      ['[data-panel="room"]','Pièce','دخل وحلل تصويرة البياسة'],
+      ['[data-panel="ai"]','Retouche IA','نحي الموبليا القديمة بالـAI'],
+      ['[data-panel="summary"]','Liste','شوف الموبليا والأسعار'],
+      ['[data-panel="projects"]','Projets','سجل وخزن المشاريع'],
+      ['[data-panel="help"]','Aide','شوف كيفاش تخدم كل خاصية'],
+      ['#catalogAssistantBtn','Assistant IA','قول للـAI واش حاب يدير'],
+      ['#glbAction','Modèle 3D','دخل موديل GLB ثلاثي الأبعاد'],
+      ['#analyzeAction','Analyse','خلي الـAI يفهم البياسة'],
+      ['#eraseAction','Gomme IA','حدد الموبليا القديمة وامحيها'],
+      ['#spatialOptimizeBtn','Placement intelligent','خلي الـAI يقترح بلاصة وحجم مناسب'],
+      ['#viewThree','Vue 3D','شوف الموبليا في 3D']
+    ];
+    items.forEach(function(it){
+      var el=document.querySelector(it[0]); if(!el || el.dataset.explained==='1') return;
+      el.dataset.explained='1'; el.setAttribute('data-explain-fr',it[1]); el.setAttribute('data-explain-dz',it[2]);
+      var wrap=el.parentElement;
+      if(wrap && getComputedStyle(wrap).position==='static') wrap.style.position='relative';
+      if(el.classList.contains('rail__btn')){
+        var dot=document.createElement('i'); dot.className='ui-help-dot'; dot.textContent='?'; el.appendChild(dot);
+      }
+      el.addEventListener('click',function(){ showHint(el); });
     });
   }
 
-  /* ---------------------------------------------------------------
-     Panel explanations
-     --------------------------------------------------------------- */
-  function installPanelExplainers() {
-    const panel = $("#panel");
-    if (!panel) return;
-
-    insertAfter($("[data-view=\"catalog\"] .panel__head", panel), {
-      title: "Meubles",
-      fr: "Choisissez un meuble dans le catalogue puis placez-le dans votre pièce.",
-      dz: "اختار الموبلية من الكاتالوغ ومن بعد حطّها فالغرفة تاعك.",
-      tone: "ai"
-    }, "catalog-head");
-
-    insertAfter($("[data-view=\"room\"] .panel__head", panel), {
-      title: "Commencer ici",
-      fr: "Importez une photo claire de votre pièce pour commencer.",
-      dz: "دخل تصويرة واضحة للغرفة باش نبداو.",
-      tone: "info"
-    }, "room-head");
-
-    insertAfter($("[data-view=\"ai\"] .panel__head", panel), {
-      title: "Gomme intelligente",
-      fr: "Sélectionnez un meuble réel : l'IA crée le masque puis reconstruit la surface.",
-      dz: "اختار موبلية حقيقية، والـIA تدير الماسك وتعاود تبني البلاصة.",
-      tone: "ai"
-    }, "ai-head");
-
-    insertAfter($("[data-view=\"summary\"] .panel__head", panel), {
-      title: "Votre liste",
-      fr: "Vérifiez les meubles ajoutés et le total estimé.",
-      dz: "شوف الموبليات لي زدتهم والسومة الإجمالية التقريبية.",
-      tone: "success"
-    }, "summary-head");
-
-    insertAfter($("[data-view=\"projects\"] .panel__head", panel), {
-      title: "Projets",
-      fr: "Sauvegardez vos compositions pour les retrouver plus tard.",
-      dz: "احفظ الكومبوزيسيون تاعك باش ترجع لها من بعد.",
-      tone: "info"
-    }, "projects-head");
-
-    insertAfter($("[data-view=\"account\"] .panel__head", panel), {
-      title: "Compte",
-      fr: "Gérez vos informations si vous utilisez les fonctions de compte.",
-      dz: "من هنا تسير معلومات الحساب تاعك إذا حبيت تستعملو.",
-      tone: "info"
-    }, "account-head");
-
-    insertAfter($("[data-view=\"help\"] .panel__head", panel), {
-      title: "Besoin d'aide ?",
-      fr: "Retrouvez ici les gestes, raccourcis et explications principales.",
-      dz: "هنا تلقى الحركات، الاختصارات والشرح المهم.",
-      tone: "orange"
-    }, "help-head");
-
-    insertAfter($("#catalogSearch"), {
-      title: "Recherche",
-      fr: "Trouvez rapidement le meuble que vous cherchez.",
-      dz: "قلب بسرعة على الموبلية لي راك حابها.",
-      tone: "info"
-    }, "catalog-search");
-
-    insertAfter($("#catalogFilters"), {
-      title: "Catégories",
-      fr: "Filtrez les meubles par type : assises, tables, chambre, déco…",
-      dz: "صنّف الموبليات حسب النوع: قعدات، طاولات، غرفة، ديكو…",
-      tone: "info"
-    }, "catalog-filters");
-
-    insertAfter($(".catalog-smart-tools"), {
-      title: "Affiner la recherche",
-      fr: "Style, matière et tri vous aident à trouver le bon produit.",
-      dz: "الستايل، الماتريال والترتيب يعاونوك تلقى المنتج المناسب.",
-      tone: "info"
-    }, "catalog-smart-tools");
-
-    insertAfter($("#catalogAssistantBtn"), {
-      title: "Recherche avec l'IA",
-      fr: "Décrivez simplement ce que vous voulez : l'IA cherche dans le catalogue.",
-      dz: "قول للـIA واش راك حاب وهي تقلب فالكَاتالوغ على الموبلية المناسبة.",
-      tone: "ai",
-      example: "Exemple : « Je cherche un canapé moderne beige » · « نحب كانابي مودرن بالبيج »"
-    }, "catalog-ai");
-
-    insertAfter($("[data-view=\"room\"] [data-import-room]", panel), {
-      title: "Importer une photo",
-      fr: "Ajoutez une photo de votre pièce pour commencer.",
-      dz: "دخل تصويرة الغرفة باش نبداو.",
-      tone: "info"
-    }, "room-import");
-
-    insertAfter($("#analyzeAction"), {
-      title: "Analyse de la pièce",
-      fr: "L'IA analyse le sol, la profondeur et les objets pour améliorer le placement.",
-      dz: "الـIA تحلل السول، العمق والموبليات باش تحط الجديد فالبلاصة الصح.",
-      tone: "ai"
-    }, "room-analyze");
-
-    insertAfter($("#spatialOptimizeBtn"), {
-      title: "Placement intelligent",
-      fr: "L'IA utilise le sol et la profondeur détectés pour aider à respecter l'échelle.",
-      dz: "الـIA تستعمل السول والعمق باش تعاونك تحط الموبلية بالقياس الصحيح.",
-      tone: "ai"
-    }, "room-spatial");
-
-    insertAfter($("#threeModeGroup"), {
-      title: "Vue 3D",
-      fr: "Visualisez les meubles en 3D et vérifiez leur placement.",
-      dz: "شوف الموبليات بالـ3D وتأكد بلي البلاصة تاعهم مليحة.",
-      tone: "ai"
-    }, "room-3d");
-
-    insertAfter($("#glbAction"), {
-      title: "Importer un modèle 3D",
-      fr: "Ajoutez votre propre modèle 3D (.glb) pour l'utiliser dans la scène.",
-      dz: "دخل الموديل 3D تاعك (.glb) إذا عندك واحد واستعملو فالغرفة.",
-      tone: "info"
-    }, "room-glb");
-
-    insertAfter($("#eraseAction"), {
-      title: "Effacer un objet",
-      fr: "Sélectionnez un meuble existant : l'IA le retire et reconstruit la surface.",
-      dz: "اختار الموبلية لي حاب تنحيها والـIA تنحيهالك وتعاود تبني البلاصة.",
-      tone: "ai"
-    }, "ai-erase");
-
-    const quickButtons = {
-      "#viewPhoto": ["Photo", "Revenir à la photo et continuer le placement.", "ارجع للتصويرة وكمل ترتيب الموبليات."],
-      "#viewThree": ["Vue 3D", "Passer à la scène 3D pour vérifier le volume et le placement.", "روح للـ3D باش تشوف الحجم والبلاصة مليح."],
-      "#previewBtn": ["Aperçu", "Prévisualiser la composition finale.", "شوف المعاينة النهائية للكومبوزيسيون."],
-      "#exportBtn": ["Exporter", "Exporter le résultat de votre composition.", "صدّر النتيجة تاع الكومبوزيسيون."],
-      "#summaryBtn": ["Récapitulatif", "Voir les meubles ajoutés et le total estimé.", "شوف الموبليات لي زدتهم والسومة الإجمالية."],
-      "#newDesignBtn": ["Nouvelle pièce", "Vider la composition et recommencer.", "فرّغ الكومبوزيسيون وعاود من جديد."],
-      "#panelCollapse": ["Réduire", "Masquer le panneau pour voir davantage la pièce.", "خبّي البانيل باش تشوف مساحة أكبر من الغرفة."],
-      "#aiAssistantSend": ["Envoyer", "Envoyer votre demande à l'Assistant IA.", "ابعث الطلب تاعك للـAssistant IA."]
+  function showHint(el){
+    var old=document.querySelector('.ui-guide-popover'); if(old) old.remove();
+    var pop=document.createElement('div'); pop.className='ui-guide-popover';
+    pop.innerHTML='<strong>'+esc(el.dataset.explainFr||'Fonction')+'</strong><p>'+esc(explainFR(el))+'</p><p class="dz">🇩🇿 '+esc(el.dataset.explainDz||'هاذ الخاصية تعاونك باش تستعمل الموقع.')+'</p>';
+    document.body.appendChild(pop);
+    var r=el.getBoundingClientRect(), w=Math.min(330,window.innerWidth-24), left=Math.max(12,Math.min(r.left,window.innerWidth-w-12));
+    var top=r.bottom+10; if(top+150>window.innerHeight) top=Math.max(12,r.top-160);
+    pop.style.left=left+'px'; pop.style.top=top+'px'; pop.style.display='block';
+    setTimeout(function(){document.addEventListener('click',function close(e){if(!pop.contains(e.target)&&e.target!==el){pop.remove();document.removeEventListener('click',close)}},{once:true})},0);
+  }
+  function explainFR(el){
+    var map={
+      'catalogAssistantBtn':'Décrivez un besoin en langage naturel et l’assistant cherche dans votre catalogue.',
+      'glbAction':'Importez votre propre modèle 3D au format GLB ou glTF.',
+      'analyzeAction':'Analysez automatiquement le sol, la profondeur et les objets visibles.',
+      'eraseAction':'Activez la gomme IA puis sélectionnez le meuble réel à retirer.',
+      'spatialOptimizeBtn':'Optimisez le placement selon la profondeur et les relations entre meubles.',
+      'viewThree':'Basculez entre la photo et la scène 3D.'
     };
-    Object.entries(quickButtons).forEach(([selector, [title, fr, dz]]) => {
-      const el = $(selector);
-      if (!el || el.dataset.uiQuickHelp) return;
-      el.dataset.uiQuickHelp = "1";
-      el.setAttribute("title", `${title} — ${fr}\n${dz}`);
-      el.setAttribute("aria-description", `${fr} ${dz}`);
-    });
+    return map[el.id]||el.dataset.explainFr||'Ouvre cette fonction de l’application.';
   }
 
-  /* ---------------------------------------------------------------
-     AI assistant guidance
-     --------------------------------------------------------------- */
-  function installAssistantExplainer() {
-    const dialog = $("#aiAssistant .ai-assistant__dialog");
-    if (!dialog || dialog.querySelector("[data-ui-help=assistant-intro]")) return;
-    const intro = makeExplainer({
-      title: "✨ Assistant IA",
-      fr: "Décrivez simplement ce que vous voulez changer dans votre pièce.",
-      dz: "قول للـIA واش حاب تبدل فالغرفة، وهي تعاونك تديرها.",
-      tone: "ai",
-      example: "« Ajoute un canapé moderne beige » · « زيد كانابي مودرن بالبيج »"
-    });
-    intro.dataset.uiHelp = "assistant-intro";
-    dialog.querySelector(".ai-assistant__head > div")?.appendChild(intro);
-
-    const input = $("#aiAssistantInput");
-    if (input) input.setAttribute("title", "Décrivez l'action à réaliser dans la pièce");
-  }
-
-  /* ---------------------------------------------------------------
-     Furniture card help. The catalogue is rebuilt dynamically, so use
-     a MutationObserver and add a tiny info badge to every card.
-     --------------------------------------------------------------- */
-  function decorateFurnitureCards() {
-    $$("#catalog .product-card").forEach(card => {
-      if (card.querySelector(".product-card__info")) return;
-      const info = document.createElement("span");
-      info.className = "product-card__info";
-      info.setAttribute("role", "button");
-      info.setAttribute("tabindex", "0");
-      info.setAttribute("aria-label", "Voir l'explication du produit");
-      info.textContent = "i";
-      info.title = "Dimensions, prix et disponibilité";
-      card.appendChild(info);
-
-      const toggle = e => {
-        e.preventDefault();
-        e.stopPropagation();
-        const old = document.querySelector(".product-help-popover");
-        if (old) old.remove();
-        const entry = window.catalogEntry?.(card.dataset.entry);
-        if (!entry) return;
-        const pop = makeExplainer({
-          title: entry.name || "Meuble",
-          fr: "Les dimensions affichées correspondent au produit du catalogue. Le badge 3D indique qu'un modèle 3D est disponible.",
-          dz: "الديمانسيونات لي باينين هما تاع المنتج. وإذا شفت 3D راه كاين موديل 3D متوفر.",
-          tone: "info",
-          example: `${Number(entry.w || 0).toFixed(2)} × ${Number(entry.d || 0).toFixed(2)} m · ${window.formatPrice?.(entry.price) || "—"}`
-        });
-        pop.classList.add("product-help-popover");
-        document.body.appendChild(pop);
-        const r = card.getBoundingClientRect();
-        const width = Math.min(320, window.innerWidth - 20);
-        pop.style.width = `${width}px`;
-        pop.style.left = `${Math.max(10, Math.min(window.innerWidth - width - 10, r.left))}px`;
-        pop.style.top = `${Math.max(10, Math.min(window.innerHeight - 190, r.bottom + 8))}px`;
-        setTimeout(() => pop.remove(), 4500);
-      };
-      info.addEventListener("click", toggle);
-      info.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggle(e); });
-    });
-  }
-
-  /* ---------------------------------------------------------------
-     Compact success guidance without changing existing toast logic.
-     --------------------------------------------------------------- */
-  function installSuccessHints() {
-    if (window.CigogneUI?.toast && !window.CigogneUI._guidanceToast) {
-      const originalToast = window.CigogneUI.toast;
-      // Keep the original API intact; only add bilingual context for the
-      // most important successful action.
-      window.CigogneUI.toast = function (message, tone = "info") {
-        if (tone === "success" || /ajouté|ajoutée/i.test(message || "")) {
-          originalToast(`${message} · ${"زدنا الموبلية، دابا تقدر تبدل البلاصة تاعها."}`, tone);
-        } else {
-          originalToast(message, tone);
-        }
-      };
-      window.CigogneUI._guidanceToast = true;
+  function showGuide(force){
+    if(!force && localStorage.getItem(KEY)==='1') return;
+    if(document.querySelector('.ui-guide-overlay')) return;
+    injectStyles(); addPersistentHints();
+    var overlay=document.createElement('div'); overlay.className='ui-guide-overlay';
+    var card=document.createElement('section'); card.className='ui-guide-card';
+    var step=0;
+    function render(){
+      var x=guideSteps[step];
+      card.innerHTML='<span class="ui-guide-kicker">GUIDE RAPIDE · '+(step+1)+' / '+guideSteps.length+'</span><h2>'+esc(x.title)+'</h2><p>'+esc(x.fr)+'</p><div class="ui-guide-dz">🇩🇿 <b>بالدارجة:</b> '+esc(x.dz)+'</div><div class="ui-guide-progress">'+guideSteps.map(function(_,i){return '<i class="ui-guide-dot '+(i===step?'on':'')+'"></i>'}).join('')+'</div><div class="ui-guide-actions"><button id="uiGuideSkip">Passer</button><button class="primary" id="uiGuideNext">'+(step===guideSteps.length-1?'Commencer':'Suivant')+'</button></div>';
+      card.querySelector('#uiGuideSkip').onclick=finish;
+      card.querySelector('#uiGuideNext').onclick=function(){ if(step<guideSteps.length-1){step++;render();highlight()} else finish(); };
+      highlight();
     }
+    function highlight(){
+      document.querySelectorAll('.ui-guide-highlight').forEach(function(e){e.classList.remove('ui-guide-highlight')});
+      var el=document.querySelector(guideSteps[step].target); if(el){el.classList.add('ui-guide-highlight'); try{el.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}}
+    }
+    function finish(){
+      localStorage.setItem(KEY,'1'); document.querySelectorAll('.ui-guide-highlight').forEach(function(e){e.classList.remove('ui-guide-highlight')}); overlay.remove();
+    }
+    overlay.appendChild(card); document.body.appendChild(overlay); render();
   }
 
-  /* ---------------------------------------------------------------
-     First-visit walkthrough. It is deliberately short and skippable.
-     --------------------------------------------------------------- */
-  const ONBOARDING_KEY = "cigogne-onboarding-v1";
-  function installOnboarding() {
-    if (localStorage.getItem(ONBOARDING_KEY) || $("#cigogneOnboarding")) return;
-    const overlay = document.createElement("div");
-    overlay.id = "cigogneOnboarding";
-    overlay.className = "cigogne-onboarding";
-    overlay.innerHTML = `
-      <div class="cigogne-onboarding__card" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
-        <div class="cigogne-onboarding__head">
-          <span class="cigogne-onboarding__eyebrow">PREMIÈRE VISITE</span>
-          <button type="button" class="cigogne-onboarding__close" data-onboarding-skip aria-label="Fermer">×</button>
-        </div>
-        <h2 id="onboardingTitle">Découvrez La Cigogne D'Ailleurs</h2>
-        <p class="cigogne-onboarding__intro">5 étapes pour comprendre l'essentiel.</p>
-        <div class="cigogne-onboarding__steps">
-          <div><b>1</b><span><strong>Meubles</strong><small>اختار الموبليات وحطّهم فالغرفة.</small></span></div>
-          <div><b>2</b><span><strong>Pièce</strong><small>دخل تصويرة الغرفة.</small></span></div>
-          <div><b>3</b><span><strong>Retouche IA</strong><small>نحي الموبليات القديمة بالـIA.</small></span></div>
-          <div><b>4</b><span><strong>Assistant IA</strong><small>قول للـIA واش حاب تدير.</small></span></div>
-          <div><b>5</b><span><strong>Vue 3D</strong><small>شوف النتيجة بالـ3D.</small></span></div>
-        </div>
-        <div class="cigogne-onboarding__actions">
-          <button type="button" class="btn btn--quiet" data-onboarding-skip>Passer</button>
-          <button type="button" class="btn btn--primary" data-onboarding-done>J'ai compris</button>
-        </div>
-        <label class="cigogne-onboarding__remember"><input type="checkbox" id="onboardingRemember"> Ne plus afficher · ما تبانش ثاني</label>
-      </div>`;
-    document.body.appendChild(overlay);
-
-    const close = () => {
-      if ($("#onboardingRemember")?.checked) localStorage.setItem(ONBOARDING_KEY, "1");
-      overlay.remove();
-    };
-    overlay.querySelectorAll("[data-onboarding-skip], [data-onboarding-done]").forEach(btn => btn.addEventListener("click", close));
+  function addGuideLauncher(){
+    var help=document.querySelector('[data-panel="help"]');
+    if(!help || help.dataset.guideLauncher) return;
+    help.dataset.guideLauncher='1';
+    var btn=document.createElement('button'); btn.type='button'; btn.className='btn btn--ai btn--block'; btn.style.margin='10px 0'; btn.textContent='✨ Revoir le guide / عاود شوف الدليل';
+    btn.onclick=function(){showGuide(true)};
+    var view=document.querySelector('[data-view="help"] .panel__scroll'); if(view) view.insertBefore(btn,view.firstChild);
   }
 
-  /* ---------------------------------------------------------------
-     Observe dynamic catalogue and late-loaded modules.
-     --------------------------------------------------------------- */
-  const observer = new MutationObserver(() => {
-    wireNavigation();
-    installAssistantExplainer();
-    decorateFurnitureCards();
+  ready(function(){
+    injectStyles();
+    setTimeout(function(){
+      addPersistentHints(); addGuideLauncher();
+      // Always show the first-use guide once. If the previous broken build set a stale flag, ?guide=1 forces it.
+      var force=/[?&]guide=1(?:&|$)/.test(location.search);
+      showGuide(force);
+    },350);
   });
-
-  function bootGuidance() {
-    wireNavigation();
-    installPanelExplainers();
-    installAssistantExplainer();
-    decorateFurnitureCards();
-    installSuccessHints();
-    observer.observe(document.body, { childList: true, subtree: true });
-    // Give the real app a moment to finish its initial catalog render.
-    window.setTimeout(() => {
-      wireNavigation();
-      installPanelExplainers();
-      installAssistantExplainer();
-      decorateFurnitureCards();
-      installOnboarding();
-      window.App?.resize?.();
-    }, 120);
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootGuidance, { once: true });
-  else bootGuidance();
+  window.CigogneUIGuide={show:showGuide,reset:function(){localStorage.removeItem(KEY);showGuide(true)}};
 })();
