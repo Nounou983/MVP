@@ -397,7 +397,7 @@ window.THREE = THREE;
   
   function setTransform(mode){if(!state.transform)return;state.transform.setMode(mode);refreshSelection();}
   function setMode(mode){state.mode=mode;if(state.orbit)state.orbit.enabled=mode==='orbit';if(state.transform)state.transform.enabled=mode==='photo';if(mode==='photo'){updateCamera();syncAll();status('Photo Match actif — caméra fixée');}else status('Vue libre 3D active');renderInspector3D();refreshSelection();}
-  function setEnabled(enabled){if(enabled&&!App.state.roomImage){status('Importez d’abord une pièce pour utiliser la 3D');return;}state.enabled=enabled;canvas.classList.toggle('active',enabled);modeBtn.classList.toggle('active',enabled);modeBtn.innerHTML=enabled?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Sortir de la 3D':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Mode 3D';if(enabled){updateCamera();if(App.state.depthImg&&!state.roomDepthTexture)loadRoomDepth();syncAll();setMode('orbit');document.getElementById('photoModeBtn')?.classList.remove('active');document.getElementById('threeModeBtn')?.classList.add('active');renderInspector3D();}else{state.transform?.detach();document.getElementById('photoModeBtn')?.classList.add('active');document.getElementById('threeModeBtn')?.classList.remove('active');status('Mode Photo actif');}}
+  function setEnabled(enabled){if(enabled&&!App.state.roomImage){status('Importez d’abord une pièce pour utiliser la 3D');return;}state.enabled=enabled;canvas.classList.toggle('active',enabled);modeBtn.classList.toggle('active',enabled);modeBtn.innerHTML=enabled?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Sortir de la 3D':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Mode 3D';if(enabled){resize();updateCamera();if(App.state.depthImg&&!state.roomDepthTexture)loadRoomDepth();syncAll();setMode('orbit');document.getElementById('photoModeBtn')?.classList.remove('active');document.getElementById('threeModeBtn')?.classList.add('active');renderInspector3D();}else{state.transform?.detach();document.getElementById('photoModeBtn')?.classList.add('active');document.getElementById('threeModeBtn')?.classList.remove('active');status('Mode Photo actif');}}
 
   function init(){
     const{w,h}=size();
@@ -425,6 +425,14 @@ window.THREE = THREE;
       requestAnimationFrame(loop);
       setTimeout(renderCatalog3DThumbnails, 80);
       setTimeout(renderCatalog3DThumbnails, 600);
+      let resizeFrame = null;
+      const scheduleResize = () => {
+        if (!state.ready || resizeFrame) return;
+        resizeFrame = requestAnimationFrame(() => { resizeFrame = null; resize(); });
+      };
+      if (window.ResizeObserver) new ResizeObserver(scheduleResize).observe(stageWrap);
+      window.addEventListener('resize', scheduleResize);
+      window.addEventListener('orientationchange', scheduleResize);
     } catch(err) {
       console.error('[Phase3D] initialization failed',err);
       state.ready=false;
@@ -569,7 +577,7 @@ window.THREE = THREE;
     return true;
   }
 
-  window.Phase3={state,enable:()=>setEnabled(true),disable:()=>setEnabled(false),sync:()=>{if(App.state.depthImg&&!state.roomDepthTexture)loadRoomDepth();syncAll();},loadSelectedGLB:()=>glbInput.click(),setMode,applyRoomModel,renderAtSize};
+  window.Phase3={state,enable:()=>setEnabled(true),disable:()=>setEnabled(false),sync:()=>{if(App.state.depthImg&&!state.roomDepthTexture)loadRoomDepth();syncAll();},loadSelectedGLB:()=>glbInput.click(),setMode,applyRoomModel,renderAtSize,resize:()=>{if(state.ready)resize();}};
 
   // Si la reconstruction est arrivée avant le chargement de la 3D.
   if(window.CigogneRoom?.model)applyRoomModel(window.CigogneRoom.model);

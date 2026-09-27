@@ -93,6 +93,21 @@ svg { display: block; }
 .doc__meta { font-size: 12px; color: var(--ink-mute); padding-left: 0; }
 
 .appbar__actions { display: flex; align-items: center; gap: 8px; }
+.appbar-more { position: relative; display: none; }
+.appbar-more .appbar__more { display: none; }
+.appbar-more__menu {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 90;
+  display: flex; flex-direction: column; min-width: 168px; padding: 6px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.18);
+}
+.appbar-more__menu button {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 0; background: none;
+  border-radius: 10px; font: inherit; font-size: 13px; color: var(--ink); text-align: left; cursor: pointer;
+}
+.appbar-more__menu button svg { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.appbar-more__menu button:hover, .appbar-more__menu button:focus-visible { background: var(--line-soft); }
+.appbar-more__menu button:disabled { opacity: .4; cursor: not-allowed; }
 .btn-group { display: flex; gap: 2px; padding: 2px; background: var(--line-soft); border-radius: 10px; }
 .total { display: flex; flex-direction: column; align-items: flex-end; padding: 0 10px 0 6px; line-height: 1.2; }
 .total small { font-size: 11px; color: var(--ink-mute); }
@@ -273,6 +288,7 @@ svg { display: block; }
   position: relative; display: grid; gap: 8px; padding: 10px; text-align: left;
   border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--paper);
   transition: border-color .16s, box-shadow .16s, transform .16s;
+  touch-action: pan-y;
 }
 .product-card:hover { border-color: #D3CEC4; box-shadow: var(--shadow-1); transform: translateY(-2px); }
 .product-card:active { cursor: grabbing; }
@@ -530,8 +546,7 @@ svg { display: block; }
   .panel.is-collapsed ~ .panel-expand { display: none; }
   .stage { grid-row: 1; }
   .viewbar { bottom: 14px; }
-  .toasts { left: 12px; right: 12px; bottom: 12px; max-width: none; }
-  .object-bar__name { display: none; }
+  .toasts { left: 12px; right: 12px; bottom: calc(64px + env(safe-area-inset-bottom)); max-width: none; z-index: 95; }
   .object-bar__sep { display: none; }
   .empty__card h1 { font-size: 24px; }
 }
@@ -805,6 +820,8 @@ svg { display: block; }
   #exportBtn,
   #undoBtn,
   #redoBtn { display: none; }
+  .appbar-more { display: block; }
+  .appbar-more .appbar__more { display: grid; place-items: center; }
 
   .ai-state {
     height: 34px;
@@ -934,7 +951,7 @@ svg { display: block; }
     width: auto !important;
   }
 
-  .toasts { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+  .toasts { left: 12px; right: 12px; bottom: calc(60px + env(safe-area-inset-bottom)); max-width: none; z-index: 95; }
   .empty { padding: 18px; }
   .empty__card { width: min(100%, 460px); }
   .empty__card h1 { font-size: clamp(24px, 7vw, 32px); }
@@ -1001,6 +1018,8 @@ html.is-mobile-ui #previewBtn,
 html.is-mobile-ui #exportBtn,
 html.is-mobile-ui #undoBtn,
 html.is-mobile-ui #redoBtn { display:none !important; }
+html.is-mobile-ui .appbar-more { display:block !important; }
+html.is-mobile-ui .appbar__more { display:grid !important; place-items: center; }
 html.is-mobile-ui .brand__mark { width:36px; height:36px; }
 html.is-mobile-ui .doc { min-width:0; overflow:hidden; }
 html.is-mobile-ui .doc__name { max-width:100%; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1113,7 +1132,7 @@ html.is-mobile-ui .product-card__price { overflow-wrap:anywhere; }
 html.is-mobile-ui .viewbar { bottom:12px; z-index:35; }
 html.is-mobile-ui .viewbar .segmented__btn { min-height:42px; padding:0 14px; }
 html.is-mobile-ui .object-bar { left:10px !important; right:10px; width:auto !important; max-width:none; }
-html.is-mobile-ui .toasts { left:10px; right:10px; bottom:10px; max-width:none; }
+html.is-mobile-ui .toasts { left:10px; right:10px; bottom:calc(60px + env(safe-area-inset-bottom)); max-width:none; z-index:95; }
 html.is-mobile-ui .empty { padding:16px; }
 html.is-mobile-ui .empty__card { width:min(100%,460px); }
 html.is-mobile-ui .empty__card h1 { font-size:clamp(23px,7vw,32px); }

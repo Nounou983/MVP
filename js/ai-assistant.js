@@ -42,6 +42,7 @@
 
   const ACTION_RE = /\b(ajoute|ajouter|mets|mettre|place|placer|pose|poser|installe|installer|veux|donne)\b/i;
   const SPATIAL_RE = /\b(de\s+chaque\s+c[oô]t[eé]|[aà]\s+c[oô]t[eé]|devant|derri[eè]re|[aà]\s+gauche|[aà]\s+droite|face\s+[aà]|vers|pr[eè]s\s+de|sous|au-dessus\s+de|dessus\s+de)\b/;
+  const DELETE_RE = /\b(supprime|supprimer|retire|retirer|enleve|enlever|efface|effacer|degage|degager|vire|virer)\b/i;
 
   const norm = v => String(v || "")
     .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -381,6 +382,35 @@
     window.AppActions.updateItem(item.uid, { rot }, { status: false }); return true;
   }
 
+  function deleteByReference(q) {
+    const base = detectBaseLoose(q);
+    let target = base ? (window.App.state.items || []).find(i => entryOf(i.entryId)?.base === base) : null;
+    if (!target) target = selected();
+    if (!target) return null;
+    const name = target.name;
+    window.AppActions.deleteItem(target.uid);
+    return name;
+  }
+
+  function moveTowardWall(q) {
+    const item = selected(); if (!item) return false;
+    const fit = window.App.roomFit?.(); if (!fit) return false;
+    const n = norm(q), margin = 24;
+    let x = item.x, y = item.y;
+    if (n.includes("gauche")) x = fit.x + margin;
+    else if (n.includes("droite")) x = fit.x + fit.w - margin;
+    else if (n.includes("fond") || n.includes("arriere") || n.includes("derriere")) y = fit.y + margin;
+    else {
+      const options = [
+        { d: item.x - fit.x, x: fit.x + margin, y: item.y },
+        { d: (fit.x + fit.w) - item.x, x: fit.x + fit.w - margin, y: item.y },
+        { d: item.y - fit.y, x: item.x, y: fit.y + margin },
+      ].sort((a, b) => a.d - b.d);
+      x = options[0].x; y = options[0].y;
+    }
+    window.AppActions.updateItem(item.uid, { x, y }, { status: false }); return true;
+  }
+
   function execute(raw) {
     const q = String(raw || "").trim(); if (!q) return;
     addUser(q); const n = norm(q);
@@ -400,6 +430,16 @@
       if (res?.item?.entryId === r.items[0].id && res.item.entryId !== before) addAssistant(`✓ <b>${item.name}</b> → <b>${r.items[0].name}</b>.`);
       else addAssistant("Le remplacement n'a pas pu être appliqué.");
       return;
+    }
+
+    if (/\b(mur|paroi|cloison)\b/.test(n) && selected()) {
+      if (moveTowardWall(q)) { addAssistant("✓ Meuble rapproché du mur."); return; }
+    }
+
+    if (DELETE_RE.test(n)) {
+      const name = deleteByReference(q);
+      if (name) { addAssistant(`✓ <b>${name}</b> retiré de la pièce.`); return; }
+      addAssistant("Je ne trouve pas ce meuble dans la pièce. Sélectionnez-le d'abord, ou précisez son type (« supprime le fauteuil »)."); return;
     }
 
     if (/\b(plus petit|plus grand|petit|agrand|redui|retreci|\d+\s*%)\b/.test(n) && !/\b(ajoute|ajouter)\b/.test(n) && selected()) {

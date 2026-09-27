@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20260926-mobile-v2" />
+  <link rel="stylesheet" href="css/style.css?v=20260927-mobile-v3" />
   <script src="deployment-config.js"></script>
   <script>
     /* Mobile runtime detection: Android/iOS "Desktop site" can expose a wide CSS viewport.
@@ -79,6 +79,31 @@
 
         <button id="previewBtn" class="btn btn--quiet" type="button">Aperçu</button>
         <button id="exportBtn" class="btn btn--quiet" type="button">Exporter</button>
+
+        <div class="appbar-more">
+          <button id="moreActionsBtn" class="icon-btn appbar__more" type="button" title="Plus d'actions" aria-haspopup="true" aria-expanded="false" aria-label="Plus d'actions">
+            <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+          </button>
+          <div id="moreActionsMenu" class="appbar-more__menu" hidden role="menu" aria-label="Actions supplémentaires">
+            <button type="button" data-forward="undoBtn" role="menuitem">
+              <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h9a7 7 0 0 1 0 14h-3"/></svg>
+              Annuler
+            </button>
+            <button type="button" data-forward="redoBtn" role="menuitem">
+              <svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9h-9a7 7 0 0 0 0 14h3"/></svg>
+              Rétablir
+            </button>
+            <button type="button" data-forward="previewBtn" role="menuitem">
+              <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              Aperçu
+            </button>
+            <button type="button" data-forward="exportBtn" role="menuitem">
+              <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+              Exporter
+            </button>
+          </div>
+        </div>
+
         <button id="summaryBtn" class="btn btn--primary" type="button">Récapitulatif</button>
         <button id="newDesignBtn" class="icon-btn" type="button" title="Vider la pièce" aria-label="Vider la pièce">
           <svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
@@ -507,7 +532,8 @@
   <!-- Moteur, interface, puis les modules qui s'y accrochent. -->
   <script src="js/app.js"></script>
   <script src="js/ui.js"></script>
-  <script src="js/ui-explanations.js?v=20260926-guidance-v2"></script>
+  <script src="js/mobile-nav.js?v=20260927-mobile-v3"></script>
+  <script src="js/ui-explanations.js?v=20260927-guidance-v3"></script>
   <script src="js/ai-assistant.js"></script>
   <script src="js/room-sync.js"></script>
   <script src="js/projects.js"></script>
